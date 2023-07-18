@@ -6,4 +6,4 @@ views = Blueprint('views', __name__) # define blueprint for our application
 @views.route('/') #decorator: whenever you go to the / URL, whatever in hom() will run
 @login_required
 def home():
-    return render_template("home.html")
+    return render_template("home.html", user=current_user)
