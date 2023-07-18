@@ -15,5 +15,5 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(150), unique = True) # no user can have the same email as someone else
     password = db.Column(db.String(150))
     first_name = db.Column(db.String(150))
-    notes = db.relationship('Note') # tells SQL that whenever we create a note, add the note id into this user's notes relationship (creates a list of all the notes by the user)
+    notes = db.relationship('Note', backref="user") # tells SQL that whenever we create a note, add the note id into this user's notes relationship (creates a list of all the notes by the user)
             
