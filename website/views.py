@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, flash, jsonify
 from flask_login import login_required, current_user
 from . import db
-from .models import Note 
+from .models import Meetup 
 import json
 
 views = Blueprint('views', __name__) # define blueprint for our application
@@ -10,19 +10,25 @@ views = Blueprint('views', __name__) # define blueprint for our application
 @login_required
 def home():
     if request.method == 'POST':
-        note = request.form.get('note')
+        date_meetup = request.form.get('meetup_time')
+        title = request.form.get('meetup_time')
+        location = request.form.get('meetup_time')
+        description = request.form.get('meetup_time')
+        invitations = request.form.get('meetup_time')
+        owner = request.form.get('meetup_time')
+        new_meetup = Meetup(date_meetup=date_meetup, title=title, location=location, description=description, invitations=invitations, owner=owner)
+        db.session.add(new_meetup)
+        db.session.commit()
+        flash('Meetup added!', category='success')
 
-        if len(note) < 1:
+        """if len(note) < 1:
             flash('Note is too short!', category='error')
-        else:
-            new_note = Note(data=note, user_id=current_user.id)
-            db.session.add(new_note)
-            db.session.commit()
-            flash('Note added!', category='success')
+        else:"""
+            
 
 
     return render_template("home.html", user=current_user)
-
+"""
 @views.route('/delete-note', methods=['POST'])
 def delete_note():
     note = json.loads(request.data)
@@ -33,4 +39,4 @@ def delete_note():
             db.session.delete(note)
             db.session.commit()
     
-    return jsonify({})
+    return jsonify({})"""
