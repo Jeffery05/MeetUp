@@ -26,5 +26,3 @@ class Meetup(db.Model):
     description = db.Column(db.String(10000))
     invitations = db.Column(db.String(10000))
     owner = db.Column(db.Integer, db.ForeignKey('user.id'))
-    #user_id = db.Column(db.Integer, db.ForeignKey('user.id')) # foreign key links user to the note
-
