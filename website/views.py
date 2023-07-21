@@ -3,6 +3,7 @@ from flask_login import login_required, current_user
 from . import db
 from .models import Meetup 
 import json
+from datetime import datetime
 
 views = Blueprint('views', __name__) # define blueprint for our application
 
@@ -10,13 +11,14 @@ views = Blueprint('views', __name__) # define blueprint for our application
 @login_required
 def home():
     if request.method == 'POST':
-        date_meetup = request.form.get('meetup_time')
-        title = request.form.get('meetup_time')
-        location = request.form.get('meetup_time')
-        description = request.form.get('meetup_time')
-        invitations = request.form.get('meetup_time')
-        owner = request.form.get('meetup_time')
-        new_meetup = Meetup(date_meetup=date_meetup, title=title, location=location, description=description, invitations=invitations, owner=owner)
+        meetup_date = request.form.get('date')
+        date = datetime.strptime(meetup_date, '%Y-%m-%dT%H:%M')   
+        title = request.form.get('title')
+        location = request.form.get('location')
+        description = request.form.get('description')
+        invitations = request.form.get('invitations')
+        owner = request.form.get('owner')
+        new_meetup = Meetup(date_meetup=date, title=title, location=location, description=description, invitations=invitations, owner=owner)
         db.session.add(new_meetup)
         db.session.commit()
         flash('Meetup added!', category='success')
