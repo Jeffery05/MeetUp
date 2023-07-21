@@ -25,4 +25,4 @@ class Meetup(db.Model):
     location = db.Column(db.String(10000))
     description = db.Column(db.String(10000))
     invitations = db.Column(db.String(10000))
-    owner = db.Column(db.Integer, db.ForeignKey('user.id'))
+    owner = db.Column(db.String(10000))

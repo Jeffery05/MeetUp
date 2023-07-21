@@ -17,7 +17,7 @@ def home():
         location = request.form.get('location')
         description = request.form.get('description')
         invitations = request.form.get('invitations')        
-        new_meetup = Meetup(date_meetup=date, title=title, location=location, description=description, invitations=invitations, owner=current_user.id)
+        new_meetup = Meetup(date_meetup=date, title=title, location=location, description=description, invitations=invitations, owner=current_user.first_name)
         flash('Meetup added!', category='success')
 
         no_error = True

@@ -1,4 +1,18 @@
 {% extends "base.html" %} {% block title %}Home{% endblock %} {% block content
 %}
 <h1 align="center">View Your Meetups</h1>
+<ul class="list-group list-group-flush" id="notes">
+    {% for meetup in user.meetups %}
+    <li class="list-group-item">
+        ID: {{meetup.id}}<br>
+        Title: {{ meetup.title }}<br>
+        Date Created: {{ meetup.date_created }}<br>
+        Date Meeting Up: {{ meetup.date_meetup}}<br>
+        Location: {{meetup.location}}<br>
+        Description: {{meetup.description}}<br>
+        Invitations: {% for user2 in meetup.users %}{{user2.name}}{% endfor %}<br>
+        Owner: {{meetup.owner}}
+    </li>
+    {% endfor %}
+</ul>
 {% endblock %}
