@@ -1,61 +1,60 @@
-{% extends "base.html" %} {% block title %}Home{% endblock %}
-
-{% block content %} 
+{% extends "base.html" %} {% block title %}Home{% endblock %} {% block content
+%}
 <h1 align="center">Meetup</h1>
 
-
 <form method="POST">
-    <div class="form-group">
-        <label for="meetup_date">Date & Time</label>
-        <input
-          type="datetime-local"
-          class="form-control"
-          id="date"
-          name="date"
-          placeholder="Enter meetup date"
-        />
-      </div>
-      <div class="form-group">
-        <label for="title">Title</label>
-        <input
-          type="text"
-          class="form-control"
-          id="title"
-          name="title"
-          placeholder="Enter title"
-        />
-      </div>
-      <div class="form-group">
-        <label for="location">Location</label>
-        <input
-          type="text"
-          class="form-control"
-          id="location"
-          name="location"
-          placeholder="Enter location"
-        />
-      </div>
-      <div class="form-group">
-        <label for="description">Description</label>
-        <input
-          type="text"
-          class="form-control"
-          id="description"
-          name="description"
-          placeholder="Enter description"
-        />
-      </div>
-      <div class="form-group">
-        <label for="invitations">Invitations</label>
-        <input
-          type="text"
-          class="form-control"
-          id="invitations"
-          name="invitations"
-          placeholder="Enter invitations"
-        />
-      </div>
-      <div class="form-group">
+  <div class="form-group">
+    <label for="meetup_date">Date & Time</label>
+    <input
+      type="datetime-local"
+      class="form-control"
+      id="date"
+      name="date"
+      placeholder="Enter meetup date"
+    />
+  </div>
+  <div class="form-group">
+    <label for="title">Title</label>
+    <input
+      type="text"
+      class="form-control"
+      id="title"
+      name="title"
+      placeholder="Enter title"
+    />
+  </div>
+  <div class="form-group">
+    <label for="location">Location</label>
+    <input
+      type="text"
+      class="form-control"
+      id="location"
+      name="location"
+      placeholder="Enter location"
+    />
+  </div>
+  <div class="form-group">
+    <label for="description">Description</label>
+    <input
+      type="text"
+      class="form-control"
+      id="description"
+      name="description"
+      placeholder="Enter description"
+    />
+  </div>
+  <div class="form-group">
+    <label for="invitations">Email Invitations (emails separated by space)</label>
+    <input
+      type="text"
+      class="form-control"
+      id="invitations"
+      name="invitations"
+      placeholder="Enter invitations"
+    />
+  </div>
+  <!-- Your comment here 
+<div class="form-group">
         <label for="owner">Owner</label>
         <input
           type="text"
@@ -64,10 +63,10 @@
           name="owner"
           placeholder="Enter owner"
         />
-      </div>
-      <br />
-    <div align="center">
-        <button type="submit" class="btn btn-primary">Add Meetup</button>
-    </div>
+      </div>-->
+  <br />
+  <div align="center">
+    <button type="submit" class="btn btn-primary">Add Meetup</button>
+  </div>
 </form>
 {% endblock %}
