@@ -2,7 +2,7 @@
 %}
 <h1 align="center">View Your Meetups</h1>
 <ul class="list-group list-group-flush" id="notes">
-    {% for meetup in user.meetups %}
+    {% for meetup in user.meetups: %}
     <li class="list-group-item">
         ID: {{meetup.id}}<br>
         Title: {{ meetup.title }}<br>
@@ -10,7 +10,20 @@
         Date Meeting Up: {{ meetup.date_meetup}}<br>
         Location: {{meetup.location}}<br>
         Description: {{meetup.description}}<br>
-        Invitations: {% for user2 in meetup.users %}{{user2.name}}{% endfor %}<br>
+        Invitations: 
+        {% set first = True %} 
+        {% for user in meetup.user: %}
+            {% print(first) %}
+            {% if first ==True %}
+                w{{user.first_name}}
+                {% print(user) %}
+            {% else %}
+                , {{user.first_name}}
+            {% endif %}  
+            {% set first = False %}
+            {% print(first) %}
+        {% endfor %}<br>
+      
         Owner: {{meetup.owner}}
     </li>
     {% endfor %}
