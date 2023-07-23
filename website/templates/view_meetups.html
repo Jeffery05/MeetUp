@@ -1,7 +1,8 @@
-{% extends "base.html" %} {% block title %}Home{% endblock %} {% block content
+{% extends "base.html" %} {% block title %}View Meetups{% endblock %} {% block content
 %}
 <h1 align="center">View Your Meetups</h1>
 <ul class="list-group list-group-flush" id="notes">
+    {% set ns = namespace(inviteNumber=1) %}
     {% for meetup in user.meetups: %}
     <li class="list-group-item">
         ID: {{meetup.id}}<br>
@@ -10,20 +11,8 @@
         Date Meeting Up: {{ meetup.date_meetup}}<br>
         Location: {{meetup.location}}<br>
         Description: {{meetup.description}}<br>
-        Invitations: 
-        {% set first = True %} 
-        {% for user in meetup.user: %}
-            {% print(first) %}
-            {% if first ==True %}
-                w{{user.first_name}}
-                {% print(user) %}
-            {% else %}
-                , {{user.first_name}}
-            {% endif %}  
-            {% set first = False %}
-            {% print(first) %}
-        {% endfor %}<br>
-      
+        Invitations: {{inviteList[ns.inviteNumber]}}<br>
+        {% set ns.inviteNumber = ns.inviteNumber+1 %}      
         Owner: {{meetup.owner}}
     </li>
     {% endfor %}

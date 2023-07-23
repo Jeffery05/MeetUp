@@ -18,23 +18,23 @@ def home():
         description = request.form.get('description')
         invitations = request.form.get('invitations')        
         new_meetup = Meetup(date_meetup=date, title=title, location=location, description=description, invitations=invitations, owner=current_user.first_name)
-        flash('Meetup added!', category='success')
+        
 
         no_error = True
         attendees = invitations.split(' ')
+        current_user.meetups.append(new_meetup)
         for person in attendees:
             if person != current_user.email:
                 user = User.query.filter_by(email=person).first()
                 if user:
                     user.meetups.append(new_meetup)
-                    print('WOOHOO')
                 else:
-                    flash('There is no account associated with ' + person + '. Please ensure the email invitations are in the correct format.', category='error')
+                    flash('There is no account associated with \"' + person + '\". Please ensure the email invitations are in the correct format.', category='error')
                     no_error = False
         if no_error:
-            current_user.meetups.append(new_meetup)
             db.session.add(new_meetup)
             db.session.commit()
+            flash('Meetup added!', category='success')
         else:
             flash('There was an error creating this meetup. Please try again.', category='error')
         """if len(note) < 1:
@@ -47,8 +47,21 @@ def home():
 
 @views.route('/view_meetups', methods=['GET', 'POST']) #decorator: whenever you go to the / URL, whatever in hom() will run
 @login_required
-def view_meetups():         
-    return render_template("view_meetups.html", user=current_user)
+def view_meetups():
+    first = True
+    invites = ""
+    for meetup in current_user.meetups:
+        first = True
+        for user in meetup.user:
+            if first == True:
+                invites = invites + "   " + user.first_name
+                first = False
+            else:
+                invites  = invites + ", " + user.first_name
+    print(invites)
+    inviteList = invites.split("   ")
+    print(inviteList)
+    return render_template("view_meetups.html", user=current_user, inviteList = inviteList)
 """
 @views.route('/delete-note', methods=['POST'])
 def delete_note():
