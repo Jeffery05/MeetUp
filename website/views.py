@@ -62,6 +62,12 @@ def view_meetups():
     inviteList = invites.split("   ")
     print(inviteList)
     return render_template("view_meetups.html", user=current_user, inviteList = inviteList)
+
+@views.route('confirmed', methods=['GET', 'POST'])
+@login_required
+def confirmed():
+    return render_template("confirmed.html", user = current_user)
+
 """
 @views.route('/delete-note', methods=['POST'])
 def delete_note():
