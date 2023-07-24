@@ -1,5 +1,27 @@
 {% extends "base.html" %} {% block title %}Confirmed{% endblock %} {% block content
     %}
     <h1 align="center">Confirmed Meetups</h1>
+    <ul class="list-group list-group-flush" id="notes">
+        {% set ns = namespace(inviteNumber=1) %}
+        {% for meetup in user.meetups: %}
+        {% if meetup.confirmed.find(confirmSearch) != -1%}
+        <li class="list-group-item">
+            ID: {{meetup.id}}<br>
+            Title: {{ meetup.title }}<br>
+            Date Created: {{ meetup.date_created }}<br>
+            Date Meeting Up: {{ meetup.date_meetup}}<br>
+            Location: {{meetup.location}}<br>
+            Description: {{meetup.description}}<br>
+            Invitations: {{inviteList[ns.inviteNumber]}}<br>     
+            Owner: {{meetup.owner}}<br> 
+            Confirmed: {{meetup.confirmed}}
+            <button type = "button" class = "btn btn-danger float-right" onClick="deleteMeetup({{meetup.id}})">
+                <span aria-hidden="true">Decline</span>
+            </button>
+        </li>
+        {% endif %}
+        {% set ns.inviteNumber = ns.inviteNumber+1 %} 
+        {% endfor %}
+    </ul>
     {% endblock %}
     

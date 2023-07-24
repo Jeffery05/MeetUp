@@ -50,6 +50,7 @@ def home():
 def view_meetups():
     first = True
     invites = ""
+    confirmSearch = " " + str(current_user.id) + " "
     for meetup in current_user.meetups:
         first = True
         for user in meetup.user:
@@ -58,15 +59,35 @@ def view_meetups():
                 first = False
             else:
                 invites  = invites + ", " + user.first_name
+        print(meetup.confirmed.find(confirmSearch))
     print(invites)
     inviteList = invites.split("   ")
     print(inviteList)
-    return render_template("view_meetups.html", user=current_user, inviteList = inviteList)
+    
+    print(confirmSearch)
+    return render_template("view_meetups.html", user=current_user, inviteList = inviteList, confirmSearch = confirmSearch)
 
 @views.route('/confirmed', methods=['GET', 'POST'])
 @login_required
 def confirmed():
-    return render_template("confirmed.html", user = current_user)
+    first = True
+    invites = ""
+    confirmSearch = " " + str(current_user.id) + " "
+    for meetup in current_user.meetups:
+        first = True
+        for user in meetup.user:
+            if first == True:
+                invites = invites + "   " + user.first_name
+                first = False
+            else:
+                invites  = invites + ", " + user.first_name
+        print(meetup.confirmed.find(confirmSearch))
+    print(invites)
+    inviteList = invites.split("   ")
+    print(inviteList)
+    
+    print(confirmSearch)
+    return render_template("confirmed.html", user=current_user, inviteList = inviteList, confirmSearch = confirmSearch)
 
 
 @views.route('/confirm-meetup', methods=['POST'])
