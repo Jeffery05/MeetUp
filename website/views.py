@@ -37,57 +37,75 @@ def home():
             flash('Meetup added!', category='success')
         else:
             flash('There was an error creating this meetup. Please try again.', category='error')
-        """if len(note) < 1:
-            flash('Note is too short!', category='error')
-        else:"""
-            
-
-
     return render_template("home.html", user=current_user)
 
 @views.route('/view_meetups', methods=['GET', 'POST']) #decorator: whenever you go to the / URL, whatever in hom() will run
 @login_required
 def view_meetups():
-    first = True
     invites = ""
+    confirmation = ""
     confirmSearch = " " + str(current_user.id) + " "
+    firstInv = True
+    firstConf = True
     for meetup in current_user.meetups:
-        first = True
+        invites = invites + "   "
+        confirmation = confirmation + "   "
+        firstInv = True
+        firstConf = True
         for user in meetup.user:
-            if first == True:
-                invites = invites + "   " + user.first_name
-                first = False
+            userSearch = " " + str(user.id) + " "
+            if meetup.confirmed.find(userSearch)  != -1:
+                if firstConf:   
+                    confirmation  = confirmation + user.first_name
+                    firstConf = False
+                else:
+                    confirmation  = confirmation + ", " + user.first_name
             else:
-                invites  = invites + ", " + user.first_name
-        print(meetup.confirmed.find(confirmSearch))
-    print(invites)
+                if firstInv:
+                    invites  = invites + user.first_name
+                    firstInv = False
+                else:
+                    invites  = invites + ", " + user.first_name
     inviteList = invites.split("   ")
     print(inviteList)
+    confirmationList = confirmation.split("   ")
     
     print(confirmSearch)
-    return render_template("view_meetups.html", user=current_user, inviteList = inviteList, confirmSearch = confirmSearch)
+    return render_template("view_meetups.html", user=current_user, inviteList = inviteList, confirmSearch = confirmSearch, confirmationList = confirmationList)
 
 @views.route('/confirmed', methods=['GET', 'POST'])
 @login_required
 def confirmed():
-    first = True
     invites = ""
+    confirmation = ""
     confirmSearch = " " + str(current_user.id) + " "
+    firstInv = True
+    firstConf = True
     for meetup in current_user.meetups:
-        first = True
+        invites = invites + "   "
+        confirmation = confirmation + "   "
+        firstInv = True
+        firstConf = True
         for user in meetup.user:
-            if first == True:
-                invites = invites + "   " + user.first_name
-                first = False
+            userSearch = " " + str(user.id) + " "
+            if meetup.confirmed.find(userSearch)  != -1:
+                if firstConf:   
+                    confirmation  = confirmation + user.first_name
+                    firstConf = False
+                else:
+                    confirmation  = confirmation + ", " + user.first_name
             else:
-                invites  = invites + ", " + user.first_name
-        print(meetup.confirmed.find(confirmSearch))
-    print(invites)
+                if firstInv:
+                    invites  = invites + user.first_name
+                    firstInv = False
+                else:
+                    invites  = invites + ", " + user.first_name
     inviteList = invites.split("   ")
     print(inviteList)
+    confirmationList = confirmation.split("   ")
     
     print(confirmSearch)
-    return render_template("confirmed.html", user=current_user, inviteList = inviteList, confirmSearch = confirmSearch)
+    return render_template("confirmed.html", user=current_user, inviteList = inviteList, confirmSearch = confirmSearch, confirmationList = confirmationList)
 
 
 @views.route('/confirm-meetup', methods=['POST'])
@@ -97,10 +115,7 @@ def confirm_meetup():
     meetup = Meetup.query.get(meetupId)
     if meetup:
         #db.session.update({meetup.confirmed: meetup.confirmed + " " + current_user.id})
-        if meetup.confirmed=="":
-            meetup.confirmed= str(current_user.id)
-        else:
-            meetup.confirmed= meetup.confirmed + " " + str(current_user.id)
+        meetup.confirmed= meetup.confirmed + " " + str(current_user.id) + " "
         print("meetup.confirmed: " + meetup.confirmed)
         db.session.commit()
     

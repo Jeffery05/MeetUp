@@ -12,9 +12,9 @@
         Date Meeting Up: {{ meetup.date_meetup}}<br>
         Location: {{meetup.location}}<br>
         Description: {{meetup.description}}<br>
-        Invitations: {{inviteList[ns.inviteNumber]}}<br>     
-        Owner: {{meetup.owner}}<br> 
-        Confirmed: {{meetup.confirmed}}
+        Invitations (pending confirmation): {{inviteList[ns.inviteNumber]}}<br> 
+        Confirmed Attending: {{confirmationList[ns.inviteNumber]}}<br>     
+        Owner: {{meetup.owner}}
         <button type = "button" class = "btn btn-success float-right" onClick="confirmMeetup({{meetup.id}})">
             <span aria-hidden="true">Confirm</span>
         </button>
