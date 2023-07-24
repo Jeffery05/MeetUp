@@ -17,9 +17,8 @@ def home():
         location = request.form.get('location')
         description = request.form.get('description')
         invitations = request.form.get('invitations')        
-        new_meetup = Meetup(date_meetup=date, title=title, location=location, description=description, invitations=invitations, confirmed = '', owner=current_user.first_name)
+        new_meetup = Meetup(date_meetup=date, title=title, location=location, description=description, invitations=invitations, confirmed = '', declined = '', owner=current_user.id)
         
-
         no_error = True
         attendees = invitations.split(' ')
         current_user.meetups.append(new_meetup)
@@ -67,10 +66,8 @@ def view_meetups():
                 else:
                     invites  = invites + ", " + user.first_name
     inviteList = invites.split("   ")
-    print(inviteList)
     confirmationList = confirmation.split("   ")
-    
-    print(confirmSearch)
+
     return render_template("view_meetups.html", user=current_user, inviteList = inviteList, confirmSearch = confirmSearch, confirmationList = confirmationList)
 
 @views.route('/confirmed', methods=['GET', 'POST'])
@@ -128,7 +125,11 @@ def decline_meetup():
     meetup = Meetup.query.get(meetupId)
     if meetup:
         current_user.meetups.remove(meetup)
+        if meetup.declined == "":
+            meetup.declined = current_user.first_name
+        else:
+            meetup.declined = meetup.declined + ", " + current_user.first_name
         db.session.commit()
-        flash("Meetup declined.", category = 'error')
+        flash("\"" + meetup.title + "\" meetup declined.", category = 'error')
     
     return jsonify({})

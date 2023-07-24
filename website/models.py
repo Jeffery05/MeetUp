@@ -26,5 +26,6 @@ class Meetup(db.Model):
     description = db.Column(db.String(10000))
     invitations = db.Column(db.String(10000))
     confirmed = db.Column(db.String(10000))
-    owner = db.Column(db.String(10000))
+    declined = db.Column(db.String(10000))
+    owner = db.Column(db.Integer)
    

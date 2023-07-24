@@ -13,7 +13,8 @@
             Location: {{meetup.location}}<br>
             Description: {{meetup.description}}<br>
             Invitations (pending confirmation): {{inviteList[ns.inviteNumber]}}<br> 
-            Confirmed Attending: {{confirmationList[ns.inviteNumber]}}<br>     
+            Confirmed Attending: {{confirmationList[ns.inviteNumber]}}<br> 
+            Declined: {{meetup.declined}}<br>       
             Owner: {{meetup.owner}}
             <button type = "button" class = "btn btn-danger float-right" onClick="confirmDeclineMeetup({{meetup.id}})">
                 <span aria-hidden="true">Decline</span>
