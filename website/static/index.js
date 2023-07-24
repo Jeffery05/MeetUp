@@ -33,3 +33,12 @@ function viewDeleteMeetup(meetupId) {
     window.location.href = "/view_meetups";
   });
 }
+
+function confirmDeleteMeetup(meetupId) {
+  fetch("/delete-meetup", {
+    method: "POST",
+    body: JSON.stringify({ meetupId: meetupId }),
+  }).then((_res) => {
+    window.location.href = "/confirmed";
+  });
+}

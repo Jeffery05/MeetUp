@@ -1,28 +1,45 @@
-{% extends "base.html" %} {% block title %}Confirmed{% endblock %} {% block content
-    %}
-    <h1 align="center">Confirmed Meetups</h1>
-    <ul class="list-group list-group-flush" id="notes">
-        {% set ns = namespace(inviteNumber=1) %}
-        {% for meetup in user.meetups: %}
-        {% if meetup.confirmed.find(confirmSearch) != -1%}
-        <li class="list-group-item">
-            ID: {{meetup.id}}<br>
-            Title: {{ meetup.title }}<br>
-            Date Created: {{ meetup.date_created }}<br>
-            Date Meeting Up: {{ meetup.date_meetup}}<br>
-            Location: {{meetup.location}}<br>
-            Description: {{meetup.description}}<br>
-            Invitations (pending confirmation): {{inviteList[ns.inviteNumber]}}<br> 
-            Confirmed Attending: {{confirmationList[ns.inviteNumber]}}<br> 
-            Declined: {{meetup.declined}}<br>       
-            Owner: {{meetup.owner}}
-            <button type = "button" class = "btn btn-danger float-right" onClick="confirmDeclineMeetup({{meetup.id}})">
-                <span aria-hidden="true">Decline</span>
-            </button>
-        </li>
-        {% endif %}
-        {% set ns.inviteNumber = ns.inviteNumber+1 %} 
-        {% endfor %}
-    </ul>
-    {% endblock %}
-    
+{% extends "base.html" %} {% block title %}Confirmed{% endblock %} {% block
+content %}
+<h1 align="center">Confirmed Meetups</h1>
+<ul class="list-group list-group-flush" id="notes">
+  {% set ns = namespace(inviteNumber=1) %} {% for meetup in user.meetups: %} {%
+  if meetup.confirmed.find(confirmSearch) != -1%}
+  <li class="list-group-item">
+    ID: {{meetup.id}}<br />
+    Title: {{ meetup.title }}<br />
+    Date Created: {{ meetup.date_created }}<br />
+    Date Meeting Up: {{ meetup.date_meetup}}<br />
+    Location: {{meetup.location}}<br />
+    Description: {{meetup.description}}<br />
+    Invitations (pending confirmation): {{inviteList[ns.inviteNumber]}}<br />
+    Confirmed Attending: {{confirmationList[ns.inviteNumber]}}<br />
+    Declined: {{meetup.declined}}<br />
+    Owner: {{meetup.owner}} 
+    {% if user.id == meetup.owner %}
+    <button
+      type="button"
+      class="btn btn-warning float-right"
+      onClick="viewDeclineMeetup({{meetup.id}})"
+    >
+      <span aria-hidden="true">Transfer Ownership</span>
+    </button>
+    <button
+      type="button"
+      class="btn btn-danger float-right"
+      onClick="confirmDeleteMeetup({{meetup.id}})"
+    >
+      <span aria-hidden="true">Delete</span>
+    </button>
+    {% else %}
+    <button
+      type="button"
+      class="btn btn-danger float-right"
+      onClick="confirmDeclineMeetup({{meetup.id}})"
+    >
+      <span aria-hidden="true">Decline</span>
+    </button>
+    {% endif %}
+  </li>
+  {% endif %} {% set ns.inviteNumber = ns.inviteNumber+1 %} {% endfor %}
+</ul>
+{% endblock %}
