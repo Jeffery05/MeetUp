@@ -63,10 +63,28 @@ def view_meetups():
     print(inviteList)
     return render_template("view_meetups.html", user=current_user, inviteList = inviteList)
 
-@views.route('confirmed', methods=['GET', 'POST'])
+@views.route('/confirmed', methods=['GET', 'POST'])
 @login_required
 def confirmed():
     return render_template("confirmed.html", user = current_user)
+
+
+@views.route('/confirm-meetup', methods=['POST'])
+def confirm_meetup():
+    meetup = json.loads(request.data)
+    meetupId = meetup['meetupId']
+    meetup = Meetup.query.get(meetupId)
+    if meetup:
+        #db.session.update({meetup.confirmed: meetup.confirmed + " " + current_user.id})
+        if meetup.confirmed=="":
+            meetup.confirmed= str(current_user.id)
+        else:
+            meetup.confirmed= meetup.confirmed + " " + str(current_user.id)
+        print("meetup.confirmed: " + meetup.confirmed)
+        db.session.commit()
+    
+    return jsonify({})
+
 
 """
 @views.route('/delete-note', methods=['POST'])
