@@ -121,16 +121,14 @@ def confirm_meetup():
     
     return jsonify({})
 
-
-"""
-@views.route('/delete-note', methods=['POST'])
-def delete_note():
-    note = json.loads(request.data)
-    noteId = note['noteId']
-    note = Note.query.get(noteId)
-    if note:
-        if note.user_id == current_user.id:
-            db.session.delete(note)
-            db.session.commit()
+@views.route('/decline-meetup', methods=['POST'])
+def decline_meetup():
+    meetup = json.loads(request.data)
+    meetupId = meetup['meetupId']
+    meetup = Meetup.query.get(meetupId)
+    if meetup:
+        current_user.meetups.remove(meetup)
+        db.session.commit()
+        flash("Meetup declined.", category = 'error')
     
-    return jsonify({})"""
+    return jsonify({})
