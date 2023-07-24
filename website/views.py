@@ -133,3 +133,14 @@ def decline_meetup():
         flash("\"" + meetup.title + "\" meetup declined.", category = 'error')
     
     return jsonify({})
+
+@views.route('/delete-meetup', methods=['POST'])
+def delete_meetup():
+    meetup = json.loads(request.data)
+    meetupId = meetup['meetupId']
+    meetup = Meetup.query.get(meetupId)
+    if meetup:
+        db.session.delete(meetup)
+        db.session.commit()
+    
+    return jsonify({})
