@@ -144,3 +144,30 @@ def delete_meetup():
         db.session.commit()
     
     return jsonify({})
+
+@views.route('/new-owner', methods=['POST'])
+def new_owner():
+    meetup = json.loads(request.data)
+    meetupId = meetup['meetupId']
+    meetup = Meetup.query.get(meetupId)
+    owner = json.loads(request.data)
+    ownerEmail = owner['newOwner']
+    ownerEmail = ownerEmail.strip()
+    print(ownerEmail)
+    user = User.query.filter_by(email=ownerEmail).first()
+    invited = False
+    if user:
+        for userMeetups in user.meetups:
+            if userMeetups.id == meetupId:
+                invited = True
+                break
+        if invited:
+            meetup.owner = user.id
+            db.session.commit()
+            flash('Ownership has successfully been transferred to ' + user.first_name + ".", category = 'success')
+        else:
+            flash(user.email + " is not invited to the meetup. They must be invited before you can transfer ownership.", category = 'error')
+    else:
+        flash('There is no user registered with email \"' + ownerEmail + "\".", category = 'error')
+    
+    return jsonify({})

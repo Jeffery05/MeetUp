@@ -1,39 +1,108 @@
-{% extends "base.html" %} {% block title %}View Meetups{% endblock %} {% block content
-%}
+{% extends "base.html" %} {% block title %}View Meetups{% endblock %} {% block
+content %}
 <h1 align="center">View Your Meetups</h1>
 <ul class="list-group list-group-flush" id="notes">
-    {% set ns = namespace(inviteNumber=1) %}
-    {% for meetup in user.meetups: %}
-    {% if meetup.confirmed.find(confirmSearch) == -1%}
-    <li class="list-group-item">
-        ID: {{meetup.id}}<br>
-        Title: {{ meetup.title }}<br>
-        Date Created: {{ meetup.date_created }}<br>
-        Date Meeting Up: {{ meetup.date_meetup}}<br>
-        Location: {{meetup.location}}<br>
-        Description: {{meetup.description}}<br>
-        Invitations (pending confirmation): {{inviteList[ns.inviteNumber]}}<br> 
-        Confirmed Attending: {{confirmationList[ns.inviteNumber]}}<br>   
-        Declined: {{meetup.declined}}<br>   
-        Owner: {{meetup.owner}}
-        <button type = "button" class = "btn btn-success float-right" onClick="confirmMeetup({{meetup.id}})">
-            <span aria-hidden="true">Confirm</span>
-        </button>
-        {% if user.id == meetup.owner %}
-        <button type = "button" class = "btn btn-warning float-right" onClick="viewDeclineMeetup({{meetup.id}})">
-            <span aria-hidden="true">Transfer Ownership</span>
-        </button>
-        <button type = "button" class = "btn btn-danger float-right" onClick="viewDeleteMeetup({{meetup.id}})">
-            <span aria-hidden="true">Delete</span>
-        </button>
-        {% else %}
-        <button type = "button" class = "btn btn-danger float-right" onClick="viewDeclineMeetup({{meetup.id}})">
-            <span aria-hidden="true">Decline</span>
-        </button>
-        {% endif %}
-    </li>
+  {% set ns = namespace(inviteNumber=1) %} {% for meetup in user.meetups: %} {%
+  if meetup.confirmed.find(confirmSearch) == -1%}
+  <li class="list-group-item">
+    ID: {{meetup.id}}<br />
+    Title: {{ meetup.title }}<br />
+    Date Created: {{ meetup.date_created }}<br />
+    Date Meeting Up: {{ meetup.date_meetup}}<br />
+    Location: {{meetup.location}}<br />
+    Description: {{meetup.description}}<br />
+    Invitations (pending confirmation): {{inviteList[ns.inviteNumber]}}<br />
+    Confirmed Attending: {{confirmationList[ns.inviteNumber]}}<br />
+    Declined: {{meetup.declined}}<br />
+    Owner: {{meetup.owner}}
+    <button
+      type="button"
+      class="btn btn-success float-right"
+      onClick="confirmMeetup({{meetup.id}})"
+    >
+      <span aria-hidden="true">Confirm</span>
+    </button>
+    {% if user.id == meetup.owner %}
+    <button
+      type="button"
+      class="btn btn-warning float-right"
+      data-toggle="modal"
+      data-target="#ownerModal"
+    >
+      <span aria-hidden="true">Transfer Ownership</span>
+    </button>
+  
+    <div
+      class="modal fade"
+      id="ownerModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="ownerModal"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="ownerModalLabel">Transfer Ownership</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="form-group">
+                <label for="new-owner" class="col-form-label"
+                  >New Owner Email:</label
+                >
+                <input type="text" class="form-control" id="new-owner-name" />
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              Close
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              onClick="viewNewOwner({{meetup.id}})"
+              data-dismiss="modal"
+              aria-label="Confirm"
+            >
+              Confirm
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button
+      type="button"
+      class="btn btn-danger float-right"
+      onClick="viewDeleteMeetup({{meetup.id}})"
+    >
+      <span aria-hidden="true">Delete</span>
+    </button>
+    {% else %}
+    <button
+      type="button"
+      class="btn btn-danger float-right"
+      onClick="viewDeclineMeetup({{meetup.id}})"
+    >
+      <span aria-hidden="true">Decline</span>
+    </button>
     {% endif %}
-    {% set ns.inviteNumber = ns.inviteNumber+1 %} 
-    {% endfor %}
+  </li>
+  {% endif %} {% set ns.inviteNumber = ns.inviteNumber+1 %} {% endfor %}
 </ul>
 {% endblock %}

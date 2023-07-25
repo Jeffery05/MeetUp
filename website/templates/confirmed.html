@@ -18,6 +18,13 @@ content %}
     {% if user.id == meetup.owner %}
     <button
       type="button"
+      class="btn btn-success float-right"
+      onClick="viewDeclineMeetup({{meetup.id}})"
+    >
+      <span aria-hidden="true">Invite</span>
+    </button>
+    <button
+      type="button"
       class="btn btn-warning float-right"
       onClick="viewDeclineMeetup({{meetup.id}})"
     >
