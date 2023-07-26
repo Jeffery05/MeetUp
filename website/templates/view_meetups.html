@@ -2,8 +2,9 @@
 content %}
 <h1 align="center">View Your Meetups</h1>
 <ul class="list-group list-group-flush" id="notes">
-  {% set ns = namespace(inviteNumber=1) %} {% for meetup in user.meetups: %} {%
-  if meetup.confirmed.find(confirmSearch) == -1%}
+  {% set ns = namespace(inviteNumber=1) %} 
+  {% for meetup in user.meetups: %} 
+  {%if meetup.confirmed.find(confirmSearch) == -1%}
   <li class="list-group-item">
     ID: {{meetup.id}}<br />
     Title: {{ meetup.title }}<br />
@@ -22,7 +23,70 @@ content %}
     >
       <span aria-hidden="true">Confirm</span>
     </button>
+
     {% if user.id == meetup.owner %}
+    <button
+      type="button"
+      class="btn btn-success float-right"
+      data-toggle="modal"
+      data-target="#inviteModal"
+    >
+      <span aria-hidden="true">Invite</span>
+    </button>
+    <div
+      class="modal fade"
+      id="inviteModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="inviteModal"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="inviteModalLabel">Invite</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form onkeydown="return event.key != 'Enter';">
+              <div class="form-group">
+                <label for="invite-user" class="col-form-label"
+                  >Please enter the emails of additionally users you would like to invite seperated by a space:</label
+                >
+                <input type="text" class="form-control" id="invite-user" placeholder="e.g. Bob72@gmail.com Stacy6@hotmail John77@gmail.com"/>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              Close
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              onClick="viewInvite({{meetup.id}})"
+              data-dismiss="modal"
+              aria-label="Confirm"
+            >
+              Confirm
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <button
       type="button"
       class="btn btn-warning float-right"
@@ -31,7 +95,6 @@ content %}
     >
       <span aria-hidden="true">Transfer Ownership</span>
     </button>
-  
     <div
       class="modal fade"
       id="ownerModal"
@@ -54,10 +117,10 @@ content %}
             </button>
           </div>
           <div class="modal-body">
-            <form>
+            <form onkeydown="return event.key != 'Enter';">
               <div class="form-group">
                 <label for="new-owner" class="col-form-label"
-                  >New Owner Email:</label
+                  >New Owner Email: {{meetup.id}}</label
                 >
                 <input type="text" class="form-control" id="new-owner-name" />
               </div>

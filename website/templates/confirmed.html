@@ -26,10 +26,65 @@ content %}
     <button
       type="button"
       class="btn btn-warning float-right"
-      onClick="viewDeclineMeetup({{meetup.id}})"
+      data-toggle="modal"
+      data-target="#ownerModal"
     >
       <span aria-hidden="true">Transfer Ownership</span>
     </button>
+
+    <div
+      class="modal fade"
+      id="ownerModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="ownerModal"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="ownerModalLabel">Transfer Ownership</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="form-group">
+                <label for="new-owner" class="col-form-label"
+                  >New Owner Email:</label
+                >
+                <input type="text" class="form-control" id="new-owner-name" />
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              Close
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              onClick="confirmNewOwner({{meetup.id}})"
+              data-dismiss="modal"
+              aria-label="Confirm"
+            >
+              Confirm
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
     <button
       type="button"
       class="btn btn-danger float-right"

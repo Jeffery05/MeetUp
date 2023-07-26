@@ -16,11 +16,15 @@ def home():
         title = request.form.get('title')
         location = request.form.get('location')
         description = request.form.get('description')
-        invitations = request.form.get('invitations')        
+        invitations = request.form.get('invitations')  
+        invitations = invitations.strip()
+        if invitations.find(current_user.email) == -1:     
+            invitations = current_user.email + " " + invitations
+        attendees = invitations.split(' ')
+        invitations = " " + invitations + " "
         new_meetup = Meetup(date_meetup=date, title=title, location=location, description=description, invitations=invitations, confirmed = '', declined = '', owner=current_user.id)
         
         no_error = True
-        attendees = invitations.split(' ')
         current_user.meetups.append(new_meetup)
         for person in attendees:
             if person != current_user.email:
@@ -125,6 +129,7 @@ def decline_meetup():
     meetup = Meetup.query.get(meetupId)
     if meetup:
         current_user.meetups.remove(meetup)
+        meetup.invitations = meetup.invitations.replace(current_user.email + ' ', '', 1)
         if meetup.declined == "":
             meetup.declined = current_user.first_name
         else:
@@ -156,18 +161,68 @@ def new_owner():
     print(ownerEmail)
     user = User.query.filter_by(email=ownerEmail).first()
     invited = False
+    print("MeetupId: " + str(meetup.id))
     if user:
         for userMeetups in user.meetups:
+            print("userMeetups.id: " + str(userMeetups.id))
             if userMeetups.id == meetupId:
                 invited = True
                 break
         if invited:
             meetup.owner = user.id
             db.session.commit()
-            flash('Ownership has successfully been transferred to ' + user.first_name + ".", category = 'success')
+            flash('Ownership of ' + meetup.title + ' has successfully been transferred to ' + user.first_name + ".", category = 'success')
         else:
             flash(user.email + " is not invited to the meetup. They must be invited before you can transfer ownership.", category = 'error')
     else:
         flash('There is no user registered with email \"' + ownerEmail + "\".", category = 'error')
     
+    return jsonify({})
+
+@views.route('/invite-users', methods=['POST'])
+def invite_users():
+    meetup = json.loads(request.data)
+    meetupId = meetup['meetupId']
+    meetup = Meetup.query.get(meetupId)
+    invites = json.loads(request.data)
+    fullInvites = invites['invites']
+    fullInvites = fullInvites.strip()
+    newAttendees = fullInvites.split(' ')
+    no_error = True
+    for newPerson in newAttendees:
+        user = User.query.filter_by(email=newPerson).first()
+        if user:
+            print("User found!")
+            if meetup.invitations.find(" " + newPerson + " ") == -1:
+                print("User not present!")
+                arr = meetup.declined.split(', ')
+                print(arr)
+                if user.first_name in arr:
+                    arr.remove(user.first_name)
+                    print(arr)
+                    if arr: # if arr isn't empty, put meetup.declined back together
+                        first = True
+                        for names in arr:
+                            if first:
+                                meetup.declined = names
+                                first = False
+                            else:
+                                meetup.declined = meetup.declined + ", " + names
+                    else:
+                        meetup.declined = ''
+                        print("cleared declined")
+                user.meetups.append(meetup)
+                meetup.invitations = meetup.invitations + newPerson + " "
+            else:
+                flash("\"" + user.first_name + "\" is already invited to this meetup. Please only add users that are not already invited. ", category='error')
+                no_error = False
+        else: 
+            flash('There is no account associated with \"' + newPerson + '\". Please ensure the email invitations are in the correct format.', category='error')
+            no_error = False
+    if no_error:
+        print("User sent!")
+        db.session.commit()
+        flash('Invitations sent!', category='success')
+    else:
+        flash('There was an error sending the invitations. Please try again.', category='error')
     return jsonify({})
