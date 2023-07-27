@@ -71,6 +71,7 @@ def view_meetups():
                     invites  = invites + ", " + user.first_name
     inviteList = invites.split("   ")
     confirmationList = confirmation.split("   ")
+    #cache.clear()
 
     return render_template("view_meetups.html", user=current_user, inviteList = inviteList, confirmSearch = confirmSearch, confirmationList = confirmationList)
 
