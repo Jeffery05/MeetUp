@@ -64,12 +64,14 @@ function confirmNewOwner(meetupId) {
   });
 }
 
-function viewInvite(meetupId) {
-  var emails = document.getElementById("invite-user").value;
+function invite(meetupId, page) {
+  alert(page)
+  var invite = "invite-user" + String(meetupId)
+  var emails = document.getElementById(invite).value;
   fetch("/invite-users", {
     method: "POST",
     body: JSON.stringify({ invites: emails, meetupId: meetupId }),
   }).then((_res) => {
-    window.location.href = "/view_meetups";
+    window.location.href = page;
   });
 }

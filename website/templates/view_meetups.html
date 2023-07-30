@@ -21,7 +21,7 @@ content %}
       class="btn btn-success float-right"
       onClick="confirmMeetup({{meetup.id}})"
     >
-      <span aria-hidden="true">Confirm</span>
+      <span aria-hidden="true">Confirm {{meetup.id}}</span>
     </button>
 
     {% if user.id == meetup.owner %}
@@ -29,13 +29,14 @@ content %}
       type="button"
       class="btn btn-success float-right"
       data-toggle="modal"
-      data-target="#inviteModal"
+      data-target={{"#inviteModal" + meetup.id|string}}
     >
-      <span aria-hidden="true">Invite</span>
+      <span aria-hidden="true">Invite{{meetup.id}}</span>
+      {{"#inviteModal" + meetup.id|string}}
     </button>
     <div
       class="modal fade"
-      id="inviteModal"
+      id={{"inviteModal" + meetup.id|string}}
       tabindex="-1"
       role="dialog"
       aria-labelledby="inviteModal"
@@ -57,10 +58,10 @@ content %}
           <div class="modal-body">
             <form onkeydown="return event.key != 'Enter';">
               <div class="form-group">
-                <label for="invite-user" class="col-form-label"
-                  >Please enter the emails of additionally users you would like to invite seperated by a space:</label
+                <label for={{"invite-user" + meetup.id|string}} class="col-form-label"
+                  >Please enter the emails of additionally users you would like to invite seperated by a space: {{meetup.id}}</label
                 >
-                <input type="text" class="form-control" id="invite-user" placeholder="e.g. Bob72@gmail.com Stacy6@hotmail John77@gmail.com"/>
+                <input type="text" class="form-control" id={{"invite-user" + meetup.id|string}} placeholder="e.g. Bob72@gmail.com Stacy6@hotmail John77@gmail.com"/>
               </div>
             </form>
           </div>
@@ -76,7 +77,7 @@ content %}
             <button
               type="button"
               class="btn btn-primary"
-              onClick="viewInvite({{meetup.id}})"
+              onClick="invite({{meetup.id}}, '/view_meetups')"
               data-dismiss="modal"
               aria-label="Confirm"
             >
