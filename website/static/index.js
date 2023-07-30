@@ -7,39 +7,21 @@ function confirmMeetup(meetupId) {
     });
 }
 
-function viewDeclineMeetup(meetupId) {
+function declineMeetup(meetupId, page) {
     fetch("/decline-meetup", {
       method: "POST",
       body: JSON.stringify({ meetupId: meetupId }),
     }).then((_res) => {
-      window.location.href = "/view_meetups";
+      window.location.href = page;
     });
 }
 
-function confirmDeclineMeetup(meetupId) {
-    fetch("/decline-meetup", {
-      method: "POST",
-      body: JSON.stringify({ meetupId: meetupId }),
-    }).then((_res) => {
-      window.location.href = "/confirmed";
-    });
-}
-
-function viewDeleteMeetup(meetupId) {
+function deleteMeetup(meetupId, page) {
   fetch("/delete-meetup", {
     method: "POST",
     body: JSON.stringify({ meetupId: meetupId }),
   }).then((_res) => {
-    window.location.href = "/view_meetups";
-  });
-}
-
-function confirmDeleteMeetup(meetupId) {
-  fetch("/delete-meetup", {
-    method: "POST",
-    body: JSON.stringify({ meetupId: meetupId }),
-  }).then((_res) => {
-    window.location.href = "/confirmed";
+    window.location.href = page;
   });
 }
 

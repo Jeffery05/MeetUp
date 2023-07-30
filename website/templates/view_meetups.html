@@ -153,7 +153,7 @@ content %}
     <button
       type="button"
       class="btn btn-danger float-right"
-      onClick="viewDeleteMeetup({{meetup.id}})"
+      onClick="deleteMeetup({{meetup.id}}, '/view_meetups')"
     >
       <span aria-hidden="true">Delete</span>
     </button>
@@ -161,7 +161,7 @@ content %}
     <button
       type="button"
       class="btn btn-danger float-right"
-      onClick="viewDeclineMeetup({{meetup.id}})"
+      onClick="declineMeetup({{meetup.id}}, '/view_meetups')"
     >
       <span aria-hidden="true">Decline</span>
     </button>

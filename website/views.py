@@ -148,6 +148,7 @@ def delete_meetup():
     meetupId = meetup['meetupId']
     meetup = Meetup.query.get(meetupId)
     if meetup:
+        flash("\"" + meetup.title + "\" meetup deleted.", category = 'error')
         db.session.delete(meetup)
         db.session.commit()
     
@@ -174,7 +175,7 @@ def new_owner():
         if invited:
             meetup.owner = user.id
             db.session.commit()
-            flash('Ownership of ' + meetup.title + ' has successfully been transferred to ' + user.first_name + ".", category = 'success')
+            flash('Ownership of \"' + meetup.title + '\" has successfully been transferred to ' + user.first_name + ".", category = 'success')
         else:
             flash(user.email + " is not invited to the meetup. They must be invited before you can transfer ownership.", category = 'error')
     else:
