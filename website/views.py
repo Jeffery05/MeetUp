@@ -128,7 +128,9 @@ def decline_meetup():
     meetup = json.loads(request.data)
     meetupId = meetup['meetupId']
     meetup = Meetup.query.get(meetupId)
+    confirmRemove = ' ' + str(current_user.id) + ' '
     if meetup:
+        meetup.confirmed = meetup.confirmed.replace(confirmRemove, '', 1)
         current_user.meetups.remove(meetup)
         meetup.invitations = meetup.invitations.replace(current_user.email + ' ', '', 1)
         if meetup.declined == "":
