@@ -43,24 +43,15 @@ function confirmDeleteMeetup(meetupId) {
   });
 }
 
-function viewNewOwner(meetupId) {
-  var email = document.getElementById("new-owner-name").value;
+function newOwner(meetupId, page) {
+  var inputId = "new-owner" + String(meetupId)
+  var email = document.getElementById(inputId).value;
   alert("MeetupId: " + meetupId)
   fetch("/new-owner", {
     method: "POST",
     body: JSON.stringify({ newOwner: email, meetupId: meetupId }),
   }).then((_res) => {
-    window.location.href = "/view_meetups";
-  });
-}
-
-function confirmNewOwner(meetupId) {
-  var email = document.getElementById("new-owner-name").value;
-  fetch("/new-owner", {
-    method: "POST",
-    body: JSON.stringify({ newOwner: email, meetupId: meetupId }),
-  }).then((_res) => {
-    window.location.href = "/confirmed";
+    window.location.href = page;
   });
 }
 

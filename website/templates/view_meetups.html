@@ -92,13 +92,13 @@ content %}
       type="button"
       class="btn btn-warning float-right"
       data-toggle="modal"
-      data-target="#ownerModal"
+      data-target={{"#ownerModal" + meetup.id|string}}
     >
       <span aria-hidden="true">Transfer Ownership</span>
     </button>
     <div
       class="modal fade"
-      id="ownerModal"
+      id={{"ownerModal" + meetup.id|string}}
       tabindex="-1"
       role="dialog"
       aria-labelledby="ownerModal"
@@ -120,10 +120,10 @@ content %}
           <div class="modal-body">
             <form onkeydown="return event.key != 'Enter';">
               <div class="form-group">
-                <label for="new-owner" class="col-form-label"
+                <label for={{"new-owner" + meetup.id|string}} class="col-form-label"
                   >New Owner Email: {{meetup.id}}</label
                 >
-                <input type="text" class="form-control" id="new-owner-name" />
+                <input type="text" class="form-control" id={{"new-owner" + meetup.id|string}} />
               </div>
             </form>
           </div>
@@ -139,7 +139,7 @@ content %}
             <button
               type="button"
               class="btn btn-primary"
-              onClick="viewNewOwner({{meetup.id}})"
+              onClick="newOwner({{meetup.id}}, '/view_meetups')"
               data-dismiss="modal"
               aria-label="Confirm"
             >
