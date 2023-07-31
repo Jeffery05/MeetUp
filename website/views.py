@@ -7,9 +7,15 @@ from datetime import datetime
 
 views = Blueprint('views', __name__) # define blueprint for our application
 
+
 @views.route('/', methods=['GET', 'POST']) #decorator: whenever you go to the / URL, whatever in hom() will run
 @login_required
-def home():
+def overview():
+    return render_template("overview.html", user=current_user)
+
+@views.route('/create', methods=['GET', 'POST']) #decorator: whenever you go to the / URL, whatever in hom() will run
+@login_required
+def create():
     if request.method == 'POST':
         meetup_date = request.form.get('date')
         date = datetime.strptime(meetup_date, '%Y-%m-%dT%H:%M')   
@@ -40,7 +46,7 @@ def home():
             flash('Meetup added!', category='success')
         else:
             flash('There was an error creating this meetup. Please try again.', category='error')
-    return render_template("home.html", user=current_user)
+    return render_template("create.html", user=current_user)
 
 @views.route('/view_meetups', methods=['GET', 'POST']) #decorator: whenever you go to the / URL, whatever in hom() will run
 @login_required
