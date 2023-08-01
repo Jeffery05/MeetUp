@@ -21,7 +21,7 @@ content %}
       class="btn btn-success float-right"
       onClick="confirmMeetup({{meetup.id}})"
     >
-      <span aria-hidden="true">Confirm {{meetup.id}}</span>
+      <span aria-hidden="true">Confirm</span>
     </button>
 
     {% if user.id == meetup.owner %}
@@ -31,8 +31,7 @@ content %}
       data-toggle="modal"
       data-target={{"#inviteModal" + meetup.id|string}}
     >
-      <span aria-hidden="true">Invite{{meetup.id}}</span>
-      {{"#inviteModal" + meetup.id|string}}
+      <span aria-hidden="true">Invite</span>
     </button>
     <div
       class="modal fade"

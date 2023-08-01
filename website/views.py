@@ -8,36 +8,37 @@ from datetime import datetime
 views = Blueprint('views', __name__) # define blueprint for our application
 
 
-@views.route('/overview', methods=['GET', 'POST']) #decorator: whenever you go to the / URL, whatever in hom() will run
+@views.route('/overview', methods=['GET', 'POST']) #decorator: whenever you go to the /overview URL, whatever in overview() will run
 @login_required
 def overview():
     return render_template("overview.html", user=current_user)
 
-@views.route('/create', methods=['GET', 'POST']) #decorator: whenever you go to the / URL, whatever in hom() will run
+@views.route('/create', methods=['GET', 'POST']) 
 @login_required
 def create():
-    if request.method == 'POST':
+    if request.method == 'POST': # if the user submits the form
         meetup_date = request.form.get('date')
         date = datetime.strptime(meetup_date, '%Y-%m-%dT%H:%M')   
         title = request.form.get('title')
         location = request.form.get('location')
         description = request.form.get('description')
         invitations = request.form.get('invitations')  
-        invitations = invitations.strip()
-        invitations = invitations.lower()
-        if invitations.find(current_user.email) == -1:     
+        invitations = invitations.strip() # remove the spaces before and after the invitiations
+        invitations = invitations.lower() # ensure the email inivitations are all lowercase
+        if invitations.find(current_user.email) == -1: # if the current user's email isn't included in the invite list, add them
             invitations = current_user.email + " " + invitations
-        attendees = invitations.split(' ')
-        invitations = " " + invitations + " "
+        invitations = " " + invitations + " " # pad the invite list with a space at the beginning and end
         new_meetup = Meetup(date_meetup=date, title=title, location=location, description=description, invitations=invitations, confirmed = '', declined = '', owner=current_user.id)
         
+        # check if invites are registered, if so create a many-to=many relationship
+        attendees = invitations.split(' ')
         no_error = True
-        current_user.meetups.append(new_meetup)
+        current_user.meetups.append(new_meetup) # ensure the owner (current user) has the first many-to-many relationship
         for person in attendees:
             if person != current_user.email:
                 user = User.query.filter_by(email=person).first()
-                if user:
-                    user.meetups.append(new_meetup)
+                if user: # if there is a registered user with that email
+                    user.meetups.append(new_meetup) # creating a many to many relationship
                 else:
                     flash('There is no account associated with \"' + person + '\". Please ensure the email invitations are in the correct format.', category='error')
                     no_error = False
@@ -52,39 +53,38 @@ def create():
 @views.route('/view_meetups', methods=['GET', 'POST']) #decorator: whenever you go to the / URL, whatever in hom() will run
 @login_required
 def view_meetups():
-    invites = ""
-    confirmation = ""
+    invites = "" # create a string of people who were invited but not confirmed
+    confirmation = "" # create a string of people who have confirmed
     confirmSearch = " " + str(current_user.id) + " "
     firstInv = True
     firstConf = True
-    for meetup in current_user.meetups:
-        invites = invites + "   "
+    for meetup in current_user.meetups: # go through all the current user's meetups
+        invites = invites + "   " # add 3 spaces to show a new meetup
         confirmation = confirmation + "   "
         firstInv = True
         firstConf = True
-        for user in meetup.user:
-            userSearch = " " + str(user.id) + " "
-            if meetup.confirmed.find(userSearch)  != -1:
-                if firstConf:   
+        for user in meetup.user: # cycle through the users with a relationship with that meetup
+            userSearch = " " + str(user.id) + " " 
+            if meetup.confirmed.find(userSearch)  != -1: # if the user has confirmed
+                if firstConf:   # if its the first confirmation for the meetup. add their name
                     confirmation  = confirmation + user.first_name
                     firstConf = False
-                else:
+                else: # if its not the first confirmation, add a comma
                     confirmation  = confirmation + ", " + user.first_name
-            else:
-                if firstInv:
+            else: # if the user has not confirmed yet, add them to the invite list
+                if firstInv: 
                     invites  = invites + user.first_name
                     firstInv = False
                 else:
                     invites  = invites + ", " + user.first_name
-    inviteList = invites.split("   ")
-    confirmationList = confirmation.split("   ")
-    #cache.clear()
+    inviteList = invites.split("   ") # create an list of meetups, inside of which are the people invitied to it
+    confirmationList = confirmation.split("   ") # create an list of meetups, inside of which are the people who confirmed to it
 
     return render_template("view_meetups.html", user=current_user, inviteList = inviteList, confirmSearch = confirmSearch, confirmationList = confirmationList)
 
 @views.route('/confirmed', methods=['GET', 'POST'])
 @login_required
-def confirmed():
+def confirmed(): # same principal as view_meetups with the list of invites + confirmed for each meetup
     invites = ""
     confirmation = ""
     confirmSearch = " " + str(current_user.id) + " "
@@ -119,9 +119,8 @@ def confirm_meetup():
     meetup = json.loads(request.data)
     meetupId = meetup['meetupId']
     meetup = Meetup.query.get(meetupId)
-    if meetup:
-        meetup.confirmed= meetup.confirmed + " " + str(current_user.id) + " "
-        print("meetup.confirmed: " + meetup.confirmed)
+    if meetup: # if the user has pressed confirm on a valid meetup
+        meetup.confirmed= meetup.confirmed + " " + str(current_user.id) + " " # add them to the confirmed list
         db.session.commit()
     return jsonify({})
 
@@ -131,11 +130,11 @@ def decline_meetup():
     meetupId = meetup['meetupId']
     meetup = Meetup.query.get(meetupId)
     confirmRemove = ' ' + str(current_user.id) + ' '
-    if meetup:
-        meetup.confirmed = meetup.confirmed.replace(confirmRemove, '', 1)
-        current_user.meetups.remove(meetup)
-        meetup.invitations = meetup.invitations.replace(current_user.email + ' ', '', 1)
-        if meetup.declined == "":
+    if meetup: # if the user has declined a valid meetup
+        meetup.confirmed = meetup.confirmed.replace(confirmRemove, '', 1) # get rid of them on the confirmed list
+        current_user.meetups.remove(meetup) # remove their relationship on the user_meetup table
+        meetup.invitations = meetup.invitations.replace(' ' + current_user.email + ' ', ' ', 1) # remove their email from the invite list
+        if meetup.declined == "": # add them to the meetup declined column for that meetup
             meetup.declined = current_user.first_name
         else:
             meetup.declined = meetup.declined + ", " + current_user.first_name
@@ -149,11 +148,10 @@ def delete_meetup():
     meetup = json.loads(request.data)
     meetupId = meetup['meetupId']
     meetup = Meetup.query.get(meetupId)
-    if meetup:
+    if meetup: # if the user has deleted a valid meetup
         flash("\"" + meetup.title + "\" meetup deleted.", category = 'error')
-        db.session.delete(meetup)
+        db.session.delete(meetup) # delete the meetup and all of its relationships
         db.session.commit()
-    
     return jsonify({})
 
 @views.route('/new-owner', methods=['POST'])
@@ -164,16 +162,15 @@ def new_owner():
     owner = json.loads(request.data)
     ownerEmail = owner['newOwner']
     ownerEmail = ownerEmail.strip()
-    ownerEmail = ownerEmail.lower()
+    ownerEmail = ownerEmail.lower() # ensure that the email is in lowercase and there are no spaces
     user = User.query.filter_by(email=ownerEmail).first()
     invited = False
-    if user:
-        for userMeetups in user.meetups:
-            print("userMeetups.id: " + str(userMeetups.id))
-            if userMeetups.id == meetupId:
+    if user: # if the user entered a valid email to transfer ownership to
+        for userMeetups in user.meetups: # cycle through the meetups that have a relationship with the potential new owner
+            if userMeetups.id == meetupId: # if one of those meetups has the same id as the current one (meaning the new owner has been invited)
                 invited = True
                 break
-        if invited:
+        if invited: # if the new owner is invited, transfer the ownership
             meetup.owner = user.id
             db.session.commit()
             flash('Ownership of \"' + meetup.title + '\" has successfully been transferred to ' + user.first_name + ".", category = 'success')
@@ -195,17 +192,13 @@ def invite_users():
     fullInvites = fullInvites.lower()
     newAttendees = fullInvites.split(' ')
     no_error = True
-    for newPerson in newAttendees:
+    for newPerson in newAttendees: # cycle through the new users that are invited
         user = User.query.filter_by(email=newPerson).first()
-        if user:
-            print("User found!")
-            if meetup.invitations.find(" " + newPerson + " ") == -1:
-                print("User not present!")
+        if user: # if the invited user is registered
+            if meetup.invitations.find(" " + newPerson + " ") == -1: # if the invited user is not already invited
                 arr = meetup.declined.split(', ')
-                print(arr)
-                if user.first_name in arr:
+                if user.first_name in arr: # if the invited user already declined, re-invite them
                     arr.remove(user.first_name)
-                    print(arr)
                     if arr: # if arr isn't empty, put meetup.declined back together
                         first = True
                         for names in arr:
@@ -216,17 +209,15 @@ def invite_users():
                                 meetup.declined = meetup.declined + ", " + names
                     else:
                         meetup.declined = ''
-                        print("cleared declined")
-                user.meetups.append(meetup)
-                meetup.invitations = meetup.invitations + newPerson + " "
+                user.meetups.append(meetup) # create a relationship between the new user and meetup
+                meetup.invitations = meetup.invitations + newPerson + " " # add the new user to the invite list
             else:
                 flash("\"" + user.first_name + "\" is already invited to this meetup. Please only add users that are not already invited. ", category='error')
                 no_error = False
         else: 
             flash('There is no account associated with \"' + newPerson + '\". Please ensure the email invitations are in the correct format.', category='error')
             no_error = False
-    if no_error:
-        print("User sent!")
+    if no_error: # if there were no errors adding the new users, commit the changes to the database
         db.session.commit()
         flash('Invitations sent!', category='success')
     else:
