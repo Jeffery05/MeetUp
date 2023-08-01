@@ -6,6 +6,10 @@ from flask_login import login_user, login_required, logout_user, current_user
 
 auth = Blueprint('auth', __name__) # define blueprint for our application
 
+@auth.route('/', methods=['GET', 'POST']) #decorator: whenever you go to the / URL, whatever in hom() will run
+def home():
+    return render_template("home.html", user=current_user)
+
 @auth.route('/how-to', methods=['GET', 'POST']) #decorator: whenever you go to the / URL, whatever in hom() will run
 def howTo():
     return render_template("howTo.html", user=current_user)

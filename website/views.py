@@ -8,7 +8,7 @@ from datetime import datetime
 views = Blueprint('views', __name__) # define blueprint for our application
 
 
-@views.route('/', methods=['GET', 'POST']) #decorator: whenever you go to the / URL, whatever in hom() will run
+@views.route('/overview', methods=['GET', 'POST']) #decorator: whenever you go to the / URL, whatever in hom() will run
 @login_required
 def overview():
     return render_template("overview.html", user=current_user)
