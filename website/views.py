@@ -24,6 +24,7 @@ def create():
         description = request.form.get('description')
         invitations = request.form.get('invitations')  
         invitations = invitations.strip()
+        invitations = invitations.lower()
         if invitations.find(current_user.email) == -1:     
             invitations = current_user.email + " " + invitations
         attendees = invitations.split(' ')
@@ -109,10 +110,7 @@ def confirmed():
                 else:
                     invites  = invites + ", " + user.first_name
     inviteList = invites.split("   ")
-    print(inviteList)
     confirmationList = confirmation.split("   ")
-    
-    print(confirmSearch)
     return render_template("confirmed.html", user=current_user, inviteList = inviteList, confirmSearch = confirmSearch, confirmationList = confirmationList)
 
 
@@ -122,11 +120,9 @@ def confirm_meetup():
     meetupId = meetup['meetupId']
     meetup = Meetup.query.get(meetupId)
     if meetup:
-        #db.session.update({meetup.confirmed: meetup.confirmed + " " + current_user.id})
         meetup.confirmed= meetup.confirmed + " " + str(current_user.id) + " "
         print("meetup.confirmed: " + meetup.confirmed)
         db.session.commit()
-    
     return jsonify({})
 
 @views.route('/decline-meetup', methods=['POST'])
@@ -168,10 +164,9 @@ def new_owner():
     owner = json.loads(request.data)
     ownerEmail = owner['newOwner']
     ownerEmail = ownerEmail.strip()
-    print(ownerEmail)
+    ownerEmail = ownerEmail.lower()
     user = User.query.filter_by(email=ownerEmail).first()
     invited = False
-    print("MeetupId: " + str(meetup.id))
     if user:
         for userMeetups in user.meetups:
             print("userMeetups.id: " + str(userMeetups.id))
@@ -197,6 +192,7 @@ def invite_users():
     invites = json.loads(request.data)
     fullInvites = invites['invites']
     fullInvites = fullInvites.strip()
+    fullInvites = fullInvites.lower()
     newAttendees = fullInvites.split(' ')
     no_error = True
     for newPerson in newAttendees:

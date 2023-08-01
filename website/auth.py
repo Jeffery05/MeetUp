@@ -19,6 +19,7 @@ def login():
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('password')
+        email = email.lower()
         
         user = User.query.filter_by(email=email).first()
         if user:
@@ -45,6 +46,7 @@ def sign_up():
         first_name = request.form.get('firstName')
         password1 = request.form.get('password1')
         password2 = request.form.get('password2')
+        email = email.lower()
 
         user = User.query.filter_by(email=email).first()
         if user:
