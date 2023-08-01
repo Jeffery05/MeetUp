@@ -28,7 +28,6 @@ function deleteMeetup(meetupId, page) {
 function newOwner(meetupId, page) {
   var inputId = "new-owner" + String(meetupId)
   var email = document.getElementById(inputId).value;
-  alert("MeetupId: " + meetupId)
   fetch("/new-owner", {
     method: "POST",
     body: JSON.stringify({ newOwner: email, meetupId: meetupId }),
@@ -38,7 +37,6 @@ function newOwner(meetupId, page) {
 }
 
 function invite(meetupId, page) {
-  alert(page)
   var invite = "invite-user" + String(meetupId)
   var emails = document.getElementById(invite).value;
   fetch("/invite-users", {
