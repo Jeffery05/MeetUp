@@ -17,12 +17,17 @@ def overview():
 @login_required
 def create():
     if request.method == 'POST': # if the user submits the form
+        place = json.loads(request.data)
+        address = place['address']
+
         meetup_date = request.form.get('date')
         date = datetime.strptime(meetup_date, '%Y-%m-%dT%H:%M')   
         title = request.form.get('title')
-        location = request.form.get('location')
+        location = request.form.get(address)
         description = request.form.get('description')
-        invitations = request.form.get('invitations')  
+        invitations = request.form.get('invitations') 
+        print("location: " + address)
+        print("invitations " + str (invitations))  
         invitations = invitations.strip() # remove the spaces before and after the invitiations
         invitations = invitations.lower() # ensure the email inivitations are all lowercase
         if invitations.find(current_user.email) == -1: # if the current user's email isn't included in the invite list, add them

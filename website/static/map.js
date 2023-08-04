@@ -7,16 +7,15 @@ function initMap() {
       zoom: 13,
       mapTypeControl: false,
     });
-    const card = document.getElementById("pac-card");
-    const input = document.getElementById("pac-input");
+    //const card = document.getElementById("pac-card");
+    const input = document.getElementById("location");
     //const biasInputElement = document.getElementById("use-location-bias");
     //const strictBoundsInputElement = document.getElementById("use-strict-bounds");
     const options = {
-      fields: ["formatted_address", "geometry", "name"],
-      strictBounds: false,
+      fields: ["formatted_address", "geometry", "name"]
     };
   
-    map.controls[google.maps.ControlPosition.TOP_CENTER].push(card);
+    //map.controls[google.maps.ControlPosition.TOP_CENTER].push(card);
   
     const autocomplete = new google.maps.places.Autocomplete(input, options);
   
@@ -40,7 +39,12 @@ function initMap() {
       marker.setVisible(false);
   
       const place = autocomplete.getPlace();
-          console.log(place.geometry)
+      const address = place.formatted_address
+      console.log("Lat: " + place.geometry.location.lat())
+      console.log("Long: " + place.geometry.location.lng())
+      console.log("Place: " + place)
+      console.log("Place Name: " + place.name)
+      console.log("Place Address: " + place.formatted_address)
       if (!place.geometry || !place.geometry.location) {
         // User entered the name of a Place that was not suggested and
         // pressed the Enter key, or the Place Details request failed.
@@ -62,6 +66,13 @@ function initMap() {
       infowindowContent.children["place-address"].textContent =
         place.formatted_address;
       infowindow.open(map, marker);
+
+      fetch("/create", {
+        method: "POST",
+        body: JSON.stringify({ address: address }),
+      }).then((_res) => {
+        window.location.href = "/create";
+      });
     });
   }
   

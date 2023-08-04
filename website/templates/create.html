@@ -3,73 +3,78 @@
 <h1 align="center">Meetup</h1>
 
 <form method="POST">
-  <div class="form-group">
-    <label for="meetup_date">Date & Time</label>
-    <input
-      type="datetime-local"
-      class="form-control"
-      id="date"
-      name="date"
-      placeholder="Enter meetup date"
-    />
-  </div>
-  <div class="form-group">
-    <label for="title">Title</label>
-    <input
-      type="text"
-      class="form-control"
-      id="title"
-      name="title"
-      placeholder="Enter title"
-    />
-  </div>
-  <div class="form-group">
-    <label for="location">Location</label>
-    <input
-      type="text"
-      class="form-control"
-      id="location"
-      name="location"
-      placeholder="Enter location"
-    />
-  </div>
-  <div class="form-group">
-    <label for="description">Description</label>
-    <input
-      type="text"
-      class="form-control"
-      id="description"
-      name="description"
-      placeholder="Enter description"
-    />
-  </div>
-  <div class="form-group">
-    <label for="invitations">Email Invitations (registered emails separated by a space, not including your own)</label>
-    <input
-      type="text"
-      class="form-control"
-      id="invitations"
-      name="invitations"
-      placeholder="Enter invitations"
-    />
-  </div>
-  <div class="pac-card" id="pac-card">
-    <div>
-      <div id="title">Autocomplete search</div>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="form-group">
+        <label for="meetup_date">Date & Time</label>
+        <input
+          type="datetime-local"
+          class="form-control"
+          id="date"
+          name="date"
+          placeholder="Enter meetup date"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label for="title">Title</label>
+        <input
+          type="text"
+          class="form-control"
+          id="title"
+          name="title"
+          placeholder="Enter title"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label for="location">Location</label>
+        <input
+          type="text"
+          class="form-control"
+          id="location"
+          name="location"
+          placeholder="Enter location"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label for="description">Description</label>
+        <input
+          type="text"
+          class="form-control"
+          id="description"
+          name="description"
+          placeholder="Enter description"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label for="invitations"
+          >Email Invitations (registered emails separated by a space, not
+          including your own)</label
+        >
+        <input
+          type="text"
+          class="form-control"
+          id="invitations"
+          name="invitations"
+          placeholder="Enter invitations"
+          required
+        />
+      </div>
     </div>
-    <div id="pac-container">
-      <input id="pac-input" type="text" placeholder="Enter a location" />
+    <div class="col-md-6">
+      <div id="map"></div>
+      <div id="infowindow-content">
+        <span id="place-name" class="title"></span><br />
+        <span id="place-address"></span>
+      </div>
     </div>
-  </div>
-  
-  <div id="map">hi</div>
-  <div id="infowindow-content">
-    <span id="place-name" class="title"></span><br />
-    <span id="place-address"></span>
-  </div>
-  <br />
-  <div align="center">
-    <button type="submit" class="btn btn-primary">Add Meetup</button>
+    <br />
+    <div class="text-center">
+      <button type="submit" class="btn btn-primary">Add Meetup</button>
+    </div>
   </div>
 </form>
 {% endblock %}
