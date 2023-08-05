@@ -17,29 +17,28 @@ def overview():
 @login_required
 def create():
     if request.method == 'POST': # if the user submits the form
-        place = json.loads(request.data)
-        address = place['address']
-
         meetup_date = request.form.get('date')
         date = datetime.strptime(meetup_date, '%Y-%m-%dT%H:%M')   
         title = request.form.get('title')
-        location = request.form.get(address)
+        location = request.form.get("location")
         description = request.form.get('description')
         invitations = request.form.get('invitations') 
-        print("location: " + address)
-        print("invitations " + str (invitations))  
+        print("location: " + location)
+        
         invitations = invitations.strip() # remove the spaces before and after the invitiations
         invitations = invitations.lower() # ensure the email inivitations are all lowercase
+        print("invitations:" + str (invitations))  
         if invitations.find(current_user.email) == -1: # if the current user's email isn't included in the invite list, add them
             invitations = current_user.email + " " + invitations
-        invitations = " " + invitations + " " # pad the invite list with a space at the beginning and end
-        new_meetup = Meetup(date_meetup=date, title=title, location=location, description=description, invitations=invitations, confirmed = '', declined = '', owner=current_user.id)
+        invitationsSpaced = " " + invitations + " " # pad the invite list with a space at the beginning and end
+        new_meetup = Meetup(date_meetup=date, title=title, location=location, description=description, invitations=invitationsSpaced, confirmed = '', declined = '', owner=current_user.id)
         
         # check if invites are registered, if so create a many-to=many relationship
         attendees = invitations.split(' ')
         no_error = True
         current_user.meetups.append(new_meetup) # ensure the owner (current user) has the first many-to-many relationship
         for person in attendees:
+            print("person = " + person)
             if person != current_user.email:
                 user = User.query.filter_by(email=person).first()
                 if user: # if there is a registered user with that email

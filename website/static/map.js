@@ -66,13 +66,6 @@ function initMap() {
       infowindowContent.children["place-address"].textContent =
         place.formatted_address;
       infowindow.open(map, marker);
-
-      fetch("/create", {
-        method: "POST",
-        body: JSON.stringify({ address: address }),
-      }).then((_res) => {
-        window.location.href = "/create";
-      });
     });
   }
   
