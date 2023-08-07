@@ -97,7 +97,10 @@ def confirmed(): # same principal as view_meetups with the list of invites + con
     confirmSearch = " " + str(current_user.id) + " "
     firstInv = True
     firstConf = True
+    meetupList = []
     for meetup in current_user.meetups:
+        if meetup.confirmed.find(confirmSearch) != -1:
+            meetupList.append({'id': meetup.id, 'lat': -25.344, 'lng': 131.036})
         invites = invites + "   "
         confirmation = confirmation + "   "
         firstInv = True
@@ -118,7 +121,7 @@ def confirmed(): # same principal as view_meetups with the list of invites + con
                     invites  = invites + ", " + user.first_name
     inviteList = invites.split("   ")
     confirmationList = confirmation.split("   ")
-    return render_template("confirmed.html", user=current_user, inviteList = inviteList, confirmSearch = confirmSearch, confirmationList = confirmationList)
+    return render_template("confirmed.html", user=current_user, inviteList = inviteList, confirmSearch = confirmSearch, confirmationList = confirmationList, meetupList = meetupList)
 
 
 @views.route('/confirm-meetup', methods=['POST'])

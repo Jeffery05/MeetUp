@@ -156,7 +156,30 @@ content %}
       <span aria-hidden="true">Decline</span>
     </button>
     {% endif %}
+    <div id = "confMap{{ meetup.id }}" class = "map" style="height: 500px"></div>
   </li>
   {% endif %} {% set ns.inviteNumber = ns.inviteNumber+1 %} {% endfor %}
 </ul>
+
+<script>
+  var meetupList = {{ meetupList | tojson }}
+  console.log(meetupList)
+  function initMap() {
+    meetupList.forEach(function(meetup) {
+            createMap(meetup.id, meetup.lat, meetup.lng);
+            console.log("created!")
+        });
+  }
+
+  function createMap(mapId, lat, lng) {
+      const mapOptions = {
+          center: { lat: lat, lng: lng },
+          zoom: 12
+      };
+
+      const map = new google.maps.Map(document.getElementById(`confMap${mapId}`), mapOptions);
+
+      // Add markers, additional map settings, etc. here
+  }
+</script>
 {% endblock %}
