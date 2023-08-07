@@ -1,5 +1,7 @@
 {% extends "base.html" %} {% block title %}View Meetups{% endblock %} {% block
 content %}
+<script src="{{ url_for('static', filename='displayMap.js') }}"></script>
+
 <h1 align="center">View Your Meetups</h1>
 <ul class="list-group list-group-flush" id="notes">
   {% set ns = namespace(inviteNumber=1) %} 
@@ -148,23 +150,24 @@ content %}
         </div>
       </div>
     </div>
-
     <button
-      type="button"
-      class="btn btn-danger float-right"
-      onClick="deleteMeetup({{meetup.id}}, '/view_meetups')"
-    >
-      <span aria-hidden="true">Delete</span>
-    </button>
-    {% else %}
-    <button
-      type="button"
-      class="btn btn-danger float-right"
-      onClick="declineMeetup({{meetup.id}}, '/view_meetups')"
-    >
-      <span aria-hidden="true">Decline</span>
-    </button>
-    {% endif %}
+    type="button"
+    class="btn btn-danger float-right"
+    onClick="deleteMeetup({{meetup.id}}, '/view_meetups')"
+  >
+    <span aria-hidden="true">Delete</span>
+  </button>
+  {% else %}
+  <button
+    type="button"
+    class="btn btn-danger float-right"
+    onClick="declineMeetup({{meetup.id}}, '/view_meetups')"
+  >
+    <span aria-hidden="true">Decline</span>
+  </button>
+  {% endif %}
+    <div id = {{"map" + meetup.id|string}} class = "map" style="height: 500px"></div>
+    <script>initMap({{meetup.id}})</script>
   </li>
   {% endif %} {% set ns.inviteNumber = ns.inviteNumber+1 %} {% endfor %}
 </ul>
