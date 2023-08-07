@@ -6,13 +6,24 @@
   <div class="row">
     <div class="col-md-6">
       <div class="form-group">
-        <label for="meetup_date">Date & Time</label>
+        <label for="meetup_date">Start Date & Time</label>
         <input
           type="datetime-local"
           class="form-control"
           id="date"
           name="date"
           placeholder="Enter meetup date"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label for="end_meetup_date">End Date & Time</label>
+        <input
+          type="datetime-local"
+          class="form-control"
+          id="endDate"
+          name="endDate"
+          placeholder="Enter end date"
           required
         />
       </div>

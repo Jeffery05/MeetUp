@@ -17,8 +17,12 @@ def overview():
 @login_required
 def create():
     if request.method == 'POST': # if the user submits the form
+        no_error = True
+        
         meetup_date = request.form.get('date')
-        date = datetime.strptime(meetup_date, '%Y-%m-%dT%H:%M')   
+        date = datetime.strptime(meetup_date, '%Y-%m-%dT%H:%M')  
+        meetup_end = request.form.get('endDate')
+        date_end = datetime.strptime(meetup_end, '%Y-%m-%dT%H:%M')  
         title = request.form.get('title')
         location = request.form.get("location")
         description = request.form.get('description')
@@ -31,11 +35,10 @@ def create():
         if invitations.find(current_user.email) == -1: # if the current user's email isn't included in the invite list, add them
             invitations = current_user.email + " " + invitations
         invitationsSpaced = " " + invitations + " " # pad the invite list with a space at the beginning and end
-        new_meetup = Meetup(date_meetup=date, title=title, location=location, description=description, invitations=invitationsSpaced, confirmed = '', declined = '', owner=current_user.id)
+        new_meetup = Meetup(date_meetup=date, date_end = date_end, title=title, location=location, lat=-25.344, lng=131.036, description=description, invitations=invitationsSpaced, confirmed = '', declined = '', owner=current_user.id)
         
         # check if invites are registered, if so create a many-to=many relationship
         attendees = invitations.split(' ')
-        no_error = True
         current_user.meetups.append(new_meetup) # ensure the owner (current user) has the first many-to-many relationship
         for person in attendees:
             print("person = " + person)
@@ -65,7 +68,7 @@ def view_meetups():
     meetupList = []
     for meetup in current_user.meetups: # go through all the current user's meetups
         if meetup.confirmed.find(confirmSearch) == -1:
-            meetupList.append({'id': meetup.id, 'lat': -25.344, 'lng': 131.036})
+            meetupList.append({'id': meetup.id, 'lat': meetup.lat, 'lng': meetup.lng})
         invites = invites + "   " # add 3 spaces to show a new meetup
         confirmation = confirmation + "   "
         firstInv = True

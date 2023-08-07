@@ -21,8 +21,11 @@ class Meetup(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     date_created = db.Column(db.DateTime(timezone=True), default=func.now()) # gets current date and time, store it as date
     date_meetup = db.Column(db.DateTime)
+    date_end = db.Column(db.DateTime)
     title = db.Column(db.String(10000))
     location = db.Column(db.String(10000))
+    lat = db.Column(db.Float)
+    long = db.Column(db.Float)
     description = db.Column(db.String(10000))
     invitations = db.Column(db.String(10000))
     confirmed = db.Column(db.String(10000))
