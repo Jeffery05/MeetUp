@@ -1,6 +1,5 @@
 {% extends "base.html" %} {% block title %}View Meetups{% endblock %} {% block
 content %}
-<script src="{{ url_for('static', filename='displayMap.js') }}"></script>
 
 <h1 align="center">View Your Meetups</h1>
 <ul class="list-group list-group-flush" id="notes">
@@ -18,6 +17,7 @@ content %}
     Confirmed Attending: {{confirmationList[ns.inviteNumber]}}<br />
     Declined: {{meetup.declined}}<br />
     Owner: {{meetup.owner}}
+    User ID: {{user.id}}
     <button
       type="button"
       class="btn btn-success float-right"
@@ -166,9 +166,31 @@ content %}
     <span aria-hidden="true">Decline</span>
   </button>
   {% endif %}
-    <div id = {{"map" + meetup.id|string}} class = "map" style="height: 500px"></div>
-    <script>initMap({{meetup.id}})</script>
+    <div id = "map{{ meetup.id }}" class = "map" style="height: 500px"></div>
   </li>
   {% endif %} {% set ns.inviteNumber = ns.inviteNumber+1 %} {% endfor %}
 </ul>
+
+
+<script>
+  var meetupList = {{ meetupList | tojson }}
+  console.log(meetupList)
+  function initMap() {
+    meetupList.forEach(function(meetup) {
+            createMap(meetup.id, meetup.lat, meetup.lng);
+            console.log("created!")
+        });
+  }
+
+  function createMap(mapId, lat, lng) {
+      const mapOptions = {
+          center: { lat: lat, lng: lng },
+          zoom: 12
+      };
+
+      const map = new google.maps.Map(document.getElementById(`map${mapId}`), mapOptions);
+
+      // Add markers, additional map settings, etc. here
+  }
+</script>
 {% endblock %}

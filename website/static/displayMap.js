@@ -1,4 +1,4 @@
-function initMap(meetupId) {
+/*function initMap(meetupId) {
     console.log("Ran2")
     meetupId = 'map' + String(meetupId)
     console.log("MeetupId: " + meetupId)
@@ -7,4 +7,4 @@ function initMap(meetupId) {
         document.getElementById(meetupId), {zoom: 12, center: location}
           )
           //let marker = new google.maps.Marker({position: location, map: meetupMap})
-}
+}*/
