@@ -3,7 +3,7 @@
 // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
 function initMap() {
     const map = new google.maps.Map(document.getElementById("map"), {
-      center: { lat: 40.749933, lng: -73.98633 },
+      center: { lat: 43.6532, lng: -79.3832 },
       zoom: 13,
       mapTypeControl: false,
     });
@@ -20,6 +20,7 @@ function initMap() {
     const autocomplete = new google.maps.places.Autocomplete(input, options);
     const latitudeInput = document.getElementById("latitude");
     const longitudeInput = document.getElementById("longitude");
+    const fullAddress = document.getElementById("fullAddress");
     const commonNameInput = document.getElementById("locationCommonName");
     // Bind the map's bounds (viewport) property to the autocomplete object,
     // so that the autocomplete requests use the current map bounds for the
@@ -43,6 +44,7 @@ function initMap() {
       const place = autocomplete.getPlace();
       latitudeInput.value = place.geometry.location.lat();
       longitudeInput.value = place.geometry.location.lng();
+      fullAddress.value = place.formatted_address;
       commonNameInput.value = place.name;
       console.log("Lat: " + place.geometry.location.lat());
       console.log("Long: " + place.geometry.location.lng());

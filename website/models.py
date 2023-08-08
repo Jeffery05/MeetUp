@@ -24,6 +24,7 @@ class Meetup(db.Model):
     date_end = db.Column(db.DateTime)
     title = db.Column(db.String(10000))
     location = db.Column(db.String(10000))
+    fullAddress = db.Column(db.String(10000))
     locationCommonName = db.Column(db.String(10000))
     lat = db.Column(db.Float)
     lng = db.Column(db.Float)
