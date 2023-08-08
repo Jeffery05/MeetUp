@@ -94,4 +94,49 @@
 </form>
 
 <script src="{{ url_for('static', filename='map.js') }}"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const startDatetimeInput = document.getElementById("date");
+  const endDatetimeInput = document.getElementById("endDate");
+
+   // Set the minimum value for the start datetime input to the current datetime
+  const currentDatetime = new Date();
+  const formattedCurrentDatetime = currentDatetime.toISOString().slice(0, 16);
+  startDatetimeInput.min = formattedCurrentDatetime;
+
+  startDatetimeInput.addEventListener("input", function() {
+    const selectedStartDatetime = new Date(startDatetimeInput.value);
+    const selectedEndDatetime = new Date(endDatetimeInput.value);
+
+    // If the selected start time is before the current time, set the start time to the current time
+    if (selectedStartDatetime < currentDatetime) {
+      startDatetimeInput.value = formattedCurrentDatetime;
+    }
+
+    // If the selected end time is before the start time, set the end time to 1 minute after the start time
+    if (selectedEndDatetime <= selectedStartDatetime) {
+      const newEndDatetime = new Date(selectedStartDatetime.getTime() + 60000); // Add 1 minute
+      endDatetimeInput.value = newEndDatetime.toISOString().slice(0, 16);
+    }
+
+    // Set the minimum value for the end datetime input
+    endDatetimeInput.min = startDatetimeInput.value;
+  });
+
+  endDatetimeInput.addEventListener("input", function() {
+    const selectedStartDatetime = new Date(startDatetimeInput.value);
+    const selectedEndDatetime = new Date(endDatetimeInput.value);
+
+    // If the selected end time is before the start time, set the end time to 1 minute after the start time
+    if (selectedEndDatetime <= selectedStartDatetime) {
+      const newEndDatetime = new Date(selectedStartDatetime.getTime() + 60000); // Add 1 minute
+      endDatetimeInput.value = newEndDatetime.toISOString().slice(0, 16);
+    }
+
+    // Set the minimum value for the end datetime input
+    endDatetimeInput.min = startDatetimeInput.value;
+  });
+});
+
+</script>
 {% endblock %}
