@@ -25,6 +25,9 @@ def create():
         date_end = datetime.strptime(meetup_end, '%Y-%m-%dT%H:%M')  
         title = request.form.get('title')
         location = request.form.get("location")
+        locationCommonName = request.form.get("locationCommonName")
+        lat = request.form.get("latitude")
+        lng = request.form.get("longitude")
         description = request.form.get('description')
         invitations = request.form.get('invitations') 
         print("location: " + location)
@@ -35,7 +38,7 @@ def create():
         if invitations.find(current_user.email) == -1: # if the current user's email isn't included in the invite list, add them
             invitations = current_user.email + " " + invitations
         invitationsSpaced = " " + invitations + " " # pad the invite list with a space at the beginning and end
-        new_meetup = Meetup(date_meetup=date, date_end = date_end, title=title, location=location, lat=-25.344, lng=131.036, description=description, invitations=invitationsSpaced, confirmed = '', declined = '', owner=current_user.id)
+        new_meetup = Meetup(date_meetup=date, date_end = date_end, title=title, location=location, locationCommonName=locationCommonName, lat=lat, lng=lng, description=description, invitations=invitationsSpaced, confirmed = '', declined = '', owner=current_user.id)
         
         # check if invites are registered, if so create a many-to=many relationship
         attendees = invitations.split(' ')
@@ -68,7 +71,7 @@ def view_meetups():
     meetupList = []
     for meetup in current_user.meetups: # go through all the current user's meetups
         if meetup.confirmed.find(confirmSearch) == -1:
-            meetupList.append({'id': meetup.id, 'lat': meetup.lat, 'lng': meetup.lng})
+            meetupList.append({'id': meetup.id, 'lat': meetup.lat, 'lng': meetup.lng, 'locationName': meetup.locationCommonName, 'address': meetup.location})
         invites = invites + "   " # add 3 spaces to show a new meetup
         confirmation = confirmation + "   "
         firstInv = True

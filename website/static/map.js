@@ -18,7 +18,9 @@ function initMap() {
     //map.controls[google.maps.ControlPosition.TOP_CENTER].push(card);
   
     const autocomplete = new google.maps.places.Autocomplete(input, options);
-  
+    const latitudeInput = document.getElementById("latitude");
+    const longitudeInput = document.getElementById("longitude");
+    const commonNameInput = document.getElementById("locationCommonName");
     // Bind the map's bounds (viewport) property to the autocomplete object,
     // so that the autocomplete requests use the current map bounds for the
     // bounds option in the request.
@@ -39,12 +41,14 @@ function initMap() {
       marker.setVisible(false);
   
       const place = autocomplete.getPlace();
-      const address = place.formatted_address
-      console.log("Lat: " + place.geometry.location.lat())
-      console.log("Long: " + place.geometry.location.lng())
-      console.log("Place: " + place)
-      console.log("Place Name: " + place.name)
-      console.log("Place Address: " + place.formatted_address)
+      latitudeInput.value = place.geometry.location.lat();
+      longitudeInput.value = place.geometry.location.lng();
+      commonNameInput.value = place.name;
+      console.log("Lat: " + place.geometry.location.lat());
+      console.log("Long: " + place.geometry.location.lng());
+      console.log("Place: " + place);
+      console.log("Place Name: " + place.name);
+      console.log("Place Address: " + place.formatted_address);
       if (!place.geometry || !place.geometry.location) {
         // User entered the name of a Place that was not suggested and
         // pressed the Enter key, or the Place Details request failed.
