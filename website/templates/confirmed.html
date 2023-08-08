@@ -166,20 +166,37 @@ content %}
   console.log(meetupList)
   function initMap() {
     meetupList.forEach(function(meetup) {
-            createMap(meetup.id, meetup.lat, meetup.lng);
+            createMap(meetup.id, meetup.lat, meetup.lng, meetup.locationName, meetup.address);
             console.log("created!")
         });
   }
 
-  function createMap(mapId, lat, lng) {
+  function createMap(mapId, lat, lng, locationName, address) {
       const mapOptions = {
           center: { lat: lat, lng: lng },
-          zoom: 12
+          zoom: 15
       };
 
       const map = new google.maps.Map(document.getElementById(`confMap${mapId}`), mapOptions);
+      
+      // create a marker
+      const myLatLng = { lat: lat, lng: lng };
+      const marker = new google.maps.Marker({position: myLatLng, map,});
 
-      // Add markers, additional map settings, etc. here
+      // create an info window
+      // Create an info window
+    const infowindow = new google.maps.InfoWindow({
+        content: `<div style="font-weight: bold; font-size: 14px; text-align: center">${locationName}</div><div style="font-size: 12px;">${address}</div>` // Replace with your desired content
+    });
+
+    
+    // Open the info window when the marker is clicked
+    marker.addListener("click", () => {
+        infowindow.open(map, marker);
+    });
+
+    // Open the info window automatically when the map is loaded
+    infowindow.open(map, marker);
   }
 </script>
 {% endblock %}

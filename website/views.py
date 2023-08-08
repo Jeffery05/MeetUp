@@ -28,6 +28,9 @@ def create():
         locationCommonName = request.form.get("locationCommonName")
         lat = request.form.get("latitude")
         lng = request.form.get("longitude")
+        if lat == "" or lng == "":
+            flash('\"' + location + '\" is not a valid address. Please try again using autocomplete.', category='error')
+            no_error = False
         description = request.form.get('description')
         invitations = request.form.get('invitations') 
         print("location: " + location)
@@ -106,7 +109,7 @@ def confirmed(): # same principal as view_meetups with the list of invites + con
     meetupList = []
     for meetup in current_user.meetups:
         if meetup.confirmed.find(confirmSearch) != -1:
-            meetupList.append({'id': meetup.id, 'lat': -25.344, 'lng': 131.036})
+            meetupList.append({'id': meetup.id, 'lat': meetup.lat, 'lng': meetup.lng, 'locationName': meetup.locationCommonName, 'address': meetup.location})
         invites = invites + "   "
         confirmation = confirmation + "   "
         firstInv = True
