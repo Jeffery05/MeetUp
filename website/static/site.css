@@ -19,6 +19,15 @@
   .map {
     height: 500px;
   }
+
+  .meetup-bg {
+    background-color: #FC6824;
+  }
+
+  .meetup-text {
+    color: white;
+    font-family: 'Outfit' ;font-size: 18px;
+  }
   
   
 
