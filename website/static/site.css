@@ -24,12 +24,44 @@
     background-color: #FC6824;
   }
 
+  .meetup-display {
+    color: rgb(0, 0, 0);
+    background-color: #FEEDCD;
+  }
+
+  .input-colour {
+    background-color: #FEEDCD;
+  }
+
   .meetup-text {
     color: white;
     font-family: 'Outfit' ;font-size: 18px;
   }
+
+  .popup-text {
+    color: rgb(0, 0, 0);
+    font-family: 'Outfit' ;font-size: 18px;
+  }
   
+  .landing-img {
+    width:500px;
+    height:600px;
+  }
   
+  .button-margin {
+    margin-left: 1%;
+    margin-right: 1%;
+  }
+  
+  hr{
+    height: 3px;
+    background-color: #ffffff;
+    border: none;
+}
+
+.center{
+  text-align: center;
+}
 
   
   
