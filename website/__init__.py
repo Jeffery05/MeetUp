@@ -7,6 +7,7 @@ db = SQLAlchemy()
 DB_NAME = "database.db"
 
 app = Flask(__name__)
+
 app.config['SECRET_KEY'] = 'oisfjsdoigjfdgk' # encrypt cookie data
 app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}' # tells them where to save database
 db.init_app(app) 
