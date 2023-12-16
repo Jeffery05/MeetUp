@@ -53,7 +53,7 @@
     margin-top: 2%;
     align-items: center;
     border: 1px solid #FEEDCD;
-    width: 80%;
+    width: 100%;
   }
   
   .center-image {
@@ -81,3 +81,19 @@
   width: 150px; /* Adjust the width as needed */
 }
   
+.overview-cards {
+  background-color: #BD4E1B;
+  color: #FEEDCD;
+  text-align: center;
+}
+
+.circle {
+  width: 170px;
+  height: 170px;
+  border-radius: 50%;
+  left: 50%;
+  transform: translateX(40%);
+  background-color: #FEEDCD; /* Set your desired background color */
+  background-repeat: no-repeat;
+  background-position: center center;
+}

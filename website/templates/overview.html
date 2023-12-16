@@ -1,5 +1,41 @@
 {% extends "base.html" %} {% block title %}Overview{% endblock %} {% block content
     %}
-    <h1 align="center">Overview:</h1>
+    <h1 align="left" class="mt-3"><b>Welcome, {{user.first_name}}!</b></h1>
+    <hr />
+    <div class="row mb-3">
+        <div class="col-md-4">
+            <div class="card overview-cards h-100 mb-3">
+                <div class="card-body d-flex flex-column">
+                <div class="circle" style="background-image: url('{{ url_for("static", filename="images/lightbulb.png") }}'); background-size: 50%; "></div>
+                  <h2 class="card-title mt-3"><bold>CREATE</bold></h2>
+                  <p class="card-text" style="text-align: left; font-size: 16px;">Create new meetups here! You can set the location, date, time, and description of your meetup. Then, type in the usernames of the people you would like to invite. You can view the status of your meetup in the 'confirmed' tab after you have created it!</p>
+                  <div class="mt-auto">
+                  <a href="{{ url_for('views.create') }}" type="button" class="btn input-colour btn-lg rounded-pill custom-width-btn">Create</a></div>
+                </div>
+              </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card overview-cards h-100 mb-3">
+                <div class="card-body d-flex flex-column">
+                <div class="circle" style="background-image: url('{{ url_for("static", filename="images/invitation.png") }}'); background-size: 75%; "></div>
+                  <h2 class="card-title mt-3"><bold>INVITATIONS</bold></h2>
+                  <p class="card-text" style="text-align: left; font-size: 16px;">View all the meetups you have been invited to here. Remember to accept or decline them to indicate your status to your friends!</p>
+                  <div class="mt-auto">
+                  <a href="{{ url_for('views.view_meetups') }}" type="button" class="btn input-colour btn-lg rounded-pill custom-width-btn">Invitations</a></div>
+                </div>
+              </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card overview-cards h-100 mb-3">
+                <div class="card-body d-flex flex-column">
+                <div class="circle" style="background-image: url('{{ url_for("static", filename="images/thumbsup.png") }}'); background-size: 75%;"></div>
+                  <h2 class="card-title mt-3"><bold>CONFIRM</bold></h2>
+                  <p class="card-text" style="text-align: left; font-size: 16px;">View the confirmed meetups here! This includes all the details of the hangout as well as who has confirmed/declined their attendance.</p>
+                  <div class="mt-auto">
+                  <a href="{{ url_for('views.confirmed') }}" type="button" class="btn input-colour btn-lg rounded-pill custom-width-btn">Confirm</a></div>
+                </div>
+              </div>
+        </div>
+    </div>
     {% endblock %}
     
