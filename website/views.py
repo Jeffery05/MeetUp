@@ -42,7 +42,7 @@ def create():
         if invitations.find(current_user.email) == -1: # if the current user's email isn't included in the invite list, add them
             invitations = current_user.email + " " + invitations
         invitationsSpaced = " " + invitations + " " # pad the invite list with a space at the beginning and end
-        new_meetup = Meetup(date_meetup=date, date_end = date_end, title=title, location=location, fullAddress=fullAddress, locationCommonName=locationCommonName, lat=lat, lng=lng, description=description, invitations=invitationsSpaced, confirmed = '', declined = '', owner=current_user.id)
+        new_meetup = Meetup(date_meetup=date, date_end = date_end, title=title, location=location, fullAddress=fullAddress, locationCommonName=locationCommonName, lat=lat, lng=lng, description=description, invitations=invitationsSpaced, confirmed = '', declined = '', owner=current_user.id, owner_firstname=current_user.first_name)
         
         # check if invites are registered, if so create a many-to=many relationship
         attendees = invitations.split(' ')
@@ -192,6 +192,7 @@ def new_owner():
                 break
         if invited: # if the new owner is invited, transfer the ownership
             meetup.owner = user.id
+            meetup.owner_firstname = user.first_name
             db.session.commit()
             flash('Ownership of \"' + meetup.title + '\" has successfully been transferred to ' + user.first_name + ".", category = 'success')
         else:

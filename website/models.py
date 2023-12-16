@@ -33,4 +33,5 @@ class Meetup(db.Model):
     confirmed = db.Column(db.String(10000))
     declined = db.Column(db.String(10000))
     owner = db.Column(db.Integer)
+    owner_firstname = db.Column(db.String(10000))
    
