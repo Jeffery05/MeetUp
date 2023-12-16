@@ -1,24 +1,27 @@
 {% extends "base.html" %} {% block title %}Confirmed{% endblock %} {% block
 content %}
-<h1 align="center">Confirmed Meetups</h1>
+<h1 align="left"><b>Confirmed:</b></h1>
+<hr />
 <ul class="list-group list-group-flush" id="notes">
-  {% set ns = namespace(inviteNumber=1) %} {% for meetup in user.meetups: %} {%
-  if meetup.confirmed.find(confirmSearch) != -1%}
-  <li class="list-group-item">
-    ID: {{meetup.id}}<br />
-    Title: {{ meetup.title }}<br />
-    Date Created: {{ meetup.date_created }}<br />
-    Date Meeting Up: {{ meetup.date_meetup}}<br />
-    Location: {{meetup.location}}<br />
-    Description: {{meetup.description}}<br />
-    Invitations (pending confirmation): {{inviteList[ns.inviteNumber]}}<br />
-    Confirmed Attending: {{confirmationList[ns.inviteNumber]}}<br />
-    Declined: {{meetup.declined}}<br />
-    Owner: {{meetup.owner}} 
+  {% set ns = namespace(inviteNumber=1) %} {% for meetup in user.meetups: %} 
+  {%if meetup.confirmed.find(confirmSearch) != -1%}
+  <li class="list-group-item  meetup-display mb-4">
+    <div class="row">
+      <div class="col-md-6">
+      <h3><b>You have been invited to the "{{ meetup.title }}" Meetup!</b></h3><br />
+    Date & Time: {{ meetup.date_meetup}} to {{ meetup.date_end }}<br />
+    Location: {{meetup.locationCommonName}}<br />
+    People Attending: {{confirmationList[ns.inviteNumber]}}<br />
+    People Pending: {{inviteList[ns.inviteNumber]}}<br />
+    People Declined: {{meetup.declined}}<br />
+    Description: {{meetup.description}}<br /></div>
+    <div class="col-md-6"><div id = "confMap{{ meetup.id }}" class = "map" style="height: 300px"></div>
+  </div></div>
+  <div class="row mt-3" style="margin-left: 35%">
     {% if user.id == meetup.owner %}
     <button
       type="button"
-      class="btn btn-success float-right"
+      class="btn btn-success float-right button-margin"
       data-toggle="modal"
       data-target={{"#inviteModal" + meetup.id|string}}
     >
@@ -66,12 +69,12 @@ content %}
             </button>
             <button
               type="button"
-              class="btn btn-primary"
+              class="btn btn-success"
               onClick="invite({{meetup.id}}, '/confirmed')"
               data-dismiss="modal"
               aria-label="Confirm"
             >
-              Confirm
+              Invite
             </button>
           </div>
         </div>
@@ -80,11 +83,11 @@ content %}
     
     <button
       type="button"
-      class="btn btn-warning float-right"
+      class="btn btn-warning float-right button-margin"
       data-toggle="modal"
       data-target={{"#ownerModal" + meetup.id|string}}
     >
-      <span aria-hidden="true">Transfer Ownership</span>
+      <span aria-hidden="true">Transfer</span>
     </button>
     <div
       class="modal fade"
@@ -111,7 +114,7 @@ content %}
             <form onkeydown="return event.key != 'Enter';">
               <div class="form-group">
                 <label for={{"new-owner" + meetup.id|string}} class="col-form-label"
-                  >New Owner Email: {{meetup.id}}</label
+                  >New Owner Email:</label
                 >
                 <input type="text" class="form-control" id={{"new-owner" + meetup.id|string}} />
               </div>
@@ -128,12 +131,12 @@ content %}
             </button>
             <button
               type="button"
-              class="btn btn-primary"
+              class="btn btn-warning"
               onClick="newOwner({{meetup.id}}, '/confirmed')"
               data-dismiss="modal"
               aria-label="Confirm"
             >
-              Confirm
+              Transfer
             </button>
           </div>
         </div>
@@ -142,7 +145,7 @@ content %}
 
     <button
       type="button"
-      class="btn btn-danger float-right"
+      class="btn btn-danger float-right button-margin"
       onClick="deleteMeetup({{meetup.id}}, '/confirmed')"
     >
       <span aria-hidden="true">Delete</span>
@@ -150,13 +153,13 @@ content %}
     {% else %}
     <button
       type="button"
-      class="btn btn-danger float-right"
+      class="btn btn-danger float-right button-margin"
       onClick="declineMeetup({{meetup.id}}, '/confirmed')"
     >
       <span aria-hidden="true">Decline</span>
     </button>
     {% endif %}
-    <div id = "confMap{{ meetup.id }}" class = "map" style="height: 500px"></div>
+    </div>
   </li>
   {% endif %} {% set ns.inviteNumber = ns.inviteNumber+1 %} {% endfor %}
 </ul>

@@ -7,7 +7,7 @@ content %}
   {% set ns = namespace(inviteNumber=1) %} 
   {% for meetup in user.meetups: %} 
   {%if meetup.confirmed.find(confirmSearch) == -1%}
-  <li class="list-group-item  meetup-display">
+  <li class="list-group-item  meetup-display mb-4">
     <div class="row">
       <div class="col-md-6">
       <h3><b>You have been invited to the "{{ meetup.title }}" Meetup!</b></h3><br />
@@ -62,7 +62,7 @@ content %}
             <form onkeydown="return event.key != 'Enter';">
               <div class="form-group">
                 <label for={{"invite-user" + meetup.id|string}} class="col-form-label"
-                  >Please enter the emails of additionally users you would like to invite seperated by a space: {{meetup.id}}</label
+                  >Please enter the emails of additionally users you would like to invite seperated by a space:</label
                 >
                 <input type="text" class="form-control" id={{"invite-user" + meetup.id|string}} placeholder="e.g. Bob72@gmail.com Stacy6@hotmail John77@gmail.com"/>
               </div>
@@ -79,12 +79,12 @@ content %}
             </button>
             <button
               type="button"
-              class="btn btn-primary button-margin"
+              class="btn btn-success button-margin"
               onClick="invite({{meetup.id}}, '/view_meetups')"
               data-dismiss="modal"
               aria-label="Confirm"
             >
-              Confirm
+              Invite
             </button>
           </div>
         </div>
@@ -124,7 +124,7 @@ content %}
             <form onkeydown="return event.key != 'Enter';">
               <div class="form-group">
                 <label for={{"new-owner" + meetup.id|string}} class="col-form-label"
-                  >New Owner Email: {{meetup.id}}</label
+                  >New Owner Email:</label
                 >
                 <input type="text" class="form-control" id={{"new-owner" + meetup.id|string}} />
               </div>
@@ -141,12 +141,12 @@ content %}
             </button>
             <button
               type="button"
-              class="btn btn-primary"
+              class="btn btn-warning"
               onClick="newOwner({{meetup.id}}, '/view_meetups')"
               data-dismiss="modal"
               aria-label="Confirm"
             >
-              Confirm
+              Transfer
             </button>
           </div>
         </div>

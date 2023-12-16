@@ -1,7 +1,7 @@
 {% extends "base.html" %} {% block title %}Home{% endblock %} {% block content
     %}
-    <div class="row">
-        <div class="col-md-6">
+    <div class="row align-items-center">
+        <div class="col-md-6 d-flex flex-column justify-content-center">
             <h1 align="left" style="font-size: 50px;  padding-top: 20%;"><bold>Meetup With Your Friends!</bold></h1>
             <p>A simple tool to coordinate hangouts with your friends!</p>
             <div class="row">
@@ -13,7 +13,7 @@
         </div>
         </div>
         <div class="col-md-6">
-            <img class="landing-img" src="{{ url_for('static', filename='images/group.png') }}" alt="Happy_Group">
+            <img class="landing-img mx-auto d-block" src="{{ url_for('static', filename='images/group.png') }}" alt="Happy_Group">
         </div>
     </div>
     
