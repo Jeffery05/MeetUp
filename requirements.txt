@@ -1,5 +1,7 @@
 # requirements.txt
 
+# Python version
+python-3.8.*
 
 # Flask and Gunicorn (assuming you're using Flask as your web framework)
 Flask==2.1.4
