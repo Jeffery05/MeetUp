@@ -1,8 +1,5 @@
 {% extends "base.html" %} {% block title %}Create{% endblock %} {% block content
 %}
-<script
-      src="https://maps.googleapis.com/maps/api/js?key={{ key }}&callback=initMap&libraries=places&v=weekly"
-    ></script>
 <h1 align="left"><b>Create Meetup:</b></h1>
 <hr />
 
@@ -144,4 +141,7 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 </script>
+<script
+      src="https://maps.googleapis.com/maps/api/js?key={{ key }}&callback=initMap&libraries=places&v=weekly"
+    ></script>
 {% endblock %}
