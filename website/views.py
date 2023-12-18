@@ -4,7 +4,9 @@ from . import db
 from .models import Meetup, User 
 import json
 from datetime import datetime
+import os
 
+key = os.environ.get('GOOGLE_MAPS_API_KEY', 'default_value')
 views = Blueprint('views', __name__) # define blueprint for our application
 
 
@@ -62,7 +64,7 @@ def create():
             flash('Meetup added!', category='success')
         else:
             flash('There was an error creating this meetup. Please try again.', category='error')
-    return render_template("create.html", user=current_user)
+    return render_template("create.html", user=current_user, key=key)
 
 @views.route('/view_meetups', methods=['GET', 'POST']) #decorator: whenever you go to the / URL, whatever in hom() will run
 @login_required
@@ -97,7 +99,7 @@ def view_meetups():
     inviteList = invites.split("   ") # create an list of meetups, inside of which are the people invitied to it
     confirmationList = confirmation.split("   ") # create an list of meetups, inside of which are the people who confirmed to it
     
-    return render_template("view_meetups.html", user=current_user, inviteList = inviteList, confirmSearch = confirmSearch, confirmationList = confirmationList, meetupList = meetupList)
+    return render_template("view_meetups.html", key=key, user=current_user, inviteList = inviteList, confirmSearch = confirmSearch, confirmationList = confirmationList, meetupList = meetupList)
 
 @views.route('/confirmed', methods=['GET', 'POST'])
 @login_required
@@ -131,7 +133,7 @@ def confirmed(): # same principal as view_meetups with the list of invites + con
                     invites  = invites + ", " + user.first_name
     inviteList = invites.split("   ")
     confirmationList = confirmation.split("   ")
-    return render_template("confirmed.html", user=current_user, inviteList = inviteList, confirmSearch = confirmSearch, confirmationList = confirmationList, meetupList = meetupList)
+    return render_template("confirmed.html", key=key, user=current_user, inviteList = inviteList, confirmSearch = confirmSearch, confirmationList = confirmationList, meetupList = meetupList)
 
 
 @views.route('/confirm-meetup', methods=['POST'])

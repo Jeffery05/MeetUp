@@ -1,5 +1,9 @@
 {% extends "base.html" %} {% block title %}Confirmed{% endblock %} {% block
 content %}
+<script
+      src="https://maps.googleapis.com/maps/api/js?key={{ key }}&callback=initMap&libraries=places&v=weekly"
+    ></script>
+
 <h1 align="left"><b>Confirmed:</b></h1>
 <hr />
 <ul class="list-group list-group-flush" id="notes">
