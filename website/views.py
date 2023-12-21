@@ -5,8 +5,12 @@ from .models import Meetup, User
 import json
 from datetime import datetime
 import os
+import cohere
+
 
 key = os.environ.get('GOOGLE_MAPS_API_KEY', 'default_value')
+cohere_key = os.environ.get('COHERE_API_KEY', 'default_value')
+co = cohere.Client(cohere_key)
 views = Blueprint('views', __name__) # define blueprint for our application
 
 
@@ -14,6 +18,53 @@ views = Blueprint('views', __name__) # define blueprint for our application
 @login_required
 def overview():
     return render_template("overview.html", user=current_user)
+
+@views.route('/ideas', methods=['GET', 'POST']) #decorator: whenever you go to the /overview URL, whatever in overview() will run
+@login_required
+def ideas():
+    response=""
+    titles=[]
+    explanation=[]
+    result_string=""
+    if request.method == 'POST':
+        duration = request.form.get('duration')
+        party_size = request.form.get('size')
+        location = request.form.get('location')
+        description = request.form.get('description')
+        response = co.generate(prompt='Give me ideas for activities under ' + duration + ' hours to do in ' + location + ' for a group of ' + party_size + ' people with the following features: ' + description, model='command-light', temperature=1.3)
+        result_string = response.generations[0].text
+
+        # Find the index of "1."
+        index_of_1 = result_string.find("1.")
+        index_of_2 = result_string.find("2.")
+        index_of_3 = result_string.find("3.")
+        index_of_4 = result_string.find("4.")
+
+        if index_of_1 != -1 and index_of_2 != -1:
+            # Find the index of ":"
+            index_of_colon = result_string.find(":", index_of_1)
+            if index_of_colon != -1:
+                # Extract the substring starting from "1." to ":"
+                titles.append(result_string[index_of_1:index_of_colon].strip())
+                explanation.append(result_string[index_of_colon + 1:index_of_2].strip())
+        if index_of_2 != -1 and index_of_3 != -1:
+            # Find the index of ":"
+            index_of_colon = result_string.find(":", index_of_2)
+            if index_of_colon != -1:
+                # Extract the substring starting from "2." to ":"
+                titles.append(result_string[index_of_2:index_of_colon].strip())
+                explanation.append(result_string[index_of_colon + 1:index_of_3].strip())
+        if index_of_3 != -1 and index_of_4 != -1:
+            # Find the index of ":"
+            index_of_colon = result_string.find(":", index_of_3)
+            if index_of_colon != -1:
+                # Extract the substring starting from "2." to ":"
+                titles.append(result_string[index_of_3:index_of_colon].strip())
+                explanation.append(result_string[index_of_colon + 1:index_of_4].strip())
+    return render_template("ideas.html", user=current_user, titles=titles, explanation=explanation, result_string=result_string)
+
+
+            
 
 @views.route('/create', methods=['GET', 'POST']) 
 @login_required

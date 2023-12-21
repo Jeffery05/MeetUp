@@ -97,3 +97,10 @@
   background-repeat: no-repeat;
   background-position: center center;
 }
+
+.generate-display {
+  color: rgb(0, 0, 0);
+  background-color: #FEEDCD;
+  margin-bottom: 3%;
+  padding: 2%;
+}

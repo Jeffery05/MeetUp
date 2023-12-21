@@ -1,0 +1,83 @@
+{% extends "base.html" %} {% block title %}Ideas{% endblock %} {% block content
+    %}
+    <h1 align="left"><b>Generate Ideas:</b></h1>
+    <hr />
+    {% if titles | length == 0 %}
+    <form method="POST">
+      <div class="row">
+        <div class="col-md-3">
+          <div class="form-group">
+            <label for="duration">Duration (in hours)</label>
+            <input
+              type="number"
+              class="form-control input-colour"
+              id="duration"
+              name="duration"
+              placeholder="Enter the duration of your activity"
+              required
+            />
+          </div></div>
+          <div class="col-md-3">
+            <div class="form-group">
+              <label for="size">Size of Party</label>
+              <input
+                type="number"
+                class="form-control input-colour"
+                id="size"
+                name="size"
+                placeholder="Enter the size of your party"
+                required
+              />
+            </div></div>
+          <div class="col-md-6">
+          <div class="form-group">
+            <label for="location">City & Country</label>
+            <input
+              type="text"
+              class="form-control input-colour"
+              id="location"
+              name="location"
+              placeholder="Enter the city & country you will be meeting up in (e.g. Toronto, Canada)"
+              required
+            />
+          </div>
+          </div></div>
+          <div class="row">
+            
+        <div class="col-md-12">
+          <div class="form-group">
+            <label for="description">Description of your group</label>
+            <input
+              type="text"
+              class="form-control input-colour"
+              id="description"
+              name="description"
+              placeholder="e.g. 18 year old males, romantic couple, etc."
+              required
+            />
+          </div>
+        </div>
+        </div>
+    <div class="mb-5 mt-3">
+      <button type="submit" class="btn input-colour">Generate</button>
+    </div>
+    </form>
+    
+
+    
+    {% else %}
+    
+        {% for rec_title in titles %}
+        <div class="row generate-display">
+            <h3><b>{{ rec_title }}:</b></h3>
+            <p>{{ explanation[loop.index-1] }}</p>
+        </div>
+        {% endfor %}
+        <div class="mb-5 mt-3">
+            <a href="{{ url_for('views.ideas') }}" type="button" class="btn input-colour">Back</a>
+          </div>
+    
+    {% endif %}
+    
+    {% endblock %}
+    
