@@ -10,7 +10,6 @@ import cohere
 
 key = os.environ.get('GOOGLE_MAPS_API_KEY', 'default_value')
 cohere_key = os.environ.get('COHERE_API_KEY', 'default_value')
-co = cohere.Client(cohere_key)
 views = Blueprint('views', __name__) # define blueprint for our application
 
 
@@ -22,6 +21,7 @@ def overview():
 @views.route('/ideas', methods=['GET', 'POST']) #decorator: whenever you go to the /overview URL, whatever in overview() will run
 @login_required
 def ideas():
+    co = cohere.Client(cohere_key)
     response=""
     titles=[]
     explanation=[]
