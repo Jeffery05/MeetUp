@@ -18,10 +18,10 @@ function initMap() {
     //map.controls[google.maps.ControlPosition.TOP_CENTER].push(card);
   
     const autocomplete = new google.maps.places.Autocomplete(input, options);
-    const latitudeInput = "";
-    const longitudeInput = "";
-    const fullAddress = "";
-    const commonNameInput = "";
+    const latitudeInput = document.getElementById("latitude");
+    const longitudeInput = document.getElementById("longitude");
+    const fullAddress = document.getElementById("fullAddress");
+    const commonNameInput = document.getElementById("locationCommonName");
     // Bind the map's bounds (viewport) property to the autocomplete object,
     // so that the autocomplete requests use the current map bounds for the
     // bounds option in the request.
