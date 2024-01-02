@@ -103,7 +103,12 @@ document.addEventListener("DOMContentLoaded", function() {
 
    // Set the minimum value for the start datetime input to the current datetime
   const currentDatetime = new Date();
-  const formattedCurrentDatetime = currentDatetime.toISOString().slice(0, 16);
+  const options = { timeZone: 'America/New_York' }; // Eastern Standard Time (EST)
+
+  // Format the date and time in Eastern Standard Time
+  const estDatetimeString = currentDatetime.toLocaleString('en-US', options);
+
+  const formattedCurrentDatetime = estDatetimeString.toISOString().slice(0, 16);
   startDatetimeInput.min = formattedCurrentDatetime;
 
   startDatetimeInput.addEventListener("input", function() {
@@ -111,7 +116,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const selectedEndDatetime = new Date(endDatetimeInput.value);
 
     // If the selected start time is before the current time, set the start time to the current time
-    if (selectedStartDatetime < currentDatetime) {
+    if (selectedStartDatetime < estDatetimeString) {
       startDatetimeInput.value = formattedCurrentDatetime;
     }
 
