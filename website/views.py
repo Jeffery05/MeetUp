@@ -31,37 +31,23 @@ def ideas():
         party_size = request.form.get('size')
         location = request.form.get('location')
         description = request.form.get('description')
-        response = co.generate(prompt='Give me ideas for activities under ' + duration + ' hours to do in ' + location + ' for a group of ' + party_size + ' people with the following features: ' + description, model='command-light', temperature=1.3)
-        result_string = response.generations[0].text
+        response = co.chat(message='Give me ideas for activities under ' + duration + ' hours to do in ' + location + ' for a group of ' + party_size + ' people with the following features: ' + description + '\n Output the summary in the following JSON format: { "activity_titles": [ "<title for first activity>", "<title for second activity>", "<title for third activity>" ], "activity_descriptions": [ "<description for first activity>", "<description for second activity>", "<description for third activity>" ]}', model='command-r', temperature=0.7)
 
-        # Find the index of "1."
-        index_of_1 = result_string.find("1.")
-        index_of_2 = result_string.find("2.")
-        index_of_3 = result_string.find("3.")
-        index_of_4 = result_string.find("4.")
-
-        if index_of_1 != -1 and index_of_2 != -1:
-            # Find the index of ":"
-            index_of_colon = result_string.find(":", index_of_1)
-            if index_of_colon != -1:
-                # Extract the substring starting from "1." to ":"
-                titles.append(result_string[index_of_1:index_of_colon].strip())
-                explanation.append(result_string[index_of_colon + 1:index_of_2].strip())
-        if index_of_2 != -1 and index_of_3 != -1:
-            # Find the index of ":"
-            index_of_colon = result_string.find(":", index_of_2)
-            if index_of_colon != -1:
-                # Extract the substring starting from "2." to ":"
-                titles.append(result_string[index_of_2:index_of_colon].strip())
-                explanation.append(result_string[index_of_colon + 1:index_of_3].strip())
-        if index_of_3 != -1 and index_of_4 != -1:
-            # Find the index of ":"
-            index_of_colon = result_string.find(":", index_of_3)
-            if index_of_colon != -1:
-                # Extract the substring starting from "2." to ":"
-                titles.append(result_string[index_of_3:index_of_colon].strip())
-                explanation.append(result_string[index_of_colon + 1:index_of_4].strip())
-    return render_template("ideas.html", user=current_user, titles=titles, explanation=explanation, result_string=result_string)
+        # Get the JSON response
+        result_string = response.text
+        # Find the index of the first opening curly brace '{' and last closing curly brace '}'
+        start_index = result_string.find('{')
+        end_index = result_string.rfind('}')
+        json_part = result_string[start_index:end_index + 1]
+        recommendation = json.loads(json_part)
+        # Extract the message from the JSON response
+        #result_string = response_json["text"]
+        
+        print(recommendation["activity_titles"])
+        print(recommendation["activity_descriptions"])         
+        titles = recommendation["activity_titles"].copy()
+        explanation = recommendation["activity_descriptions"].copy()
+    return render_template("ideas.html", user=current_user, titles=titles, explanation=explanation)
 
 
             
@@ -97,7 +83,7 @@ def create():
         invitationsSpaced = " " + invitations + " " # pad the invite list with a space at the beginning and end
         new_meetup = Meetup(date_meetup=date, date_end = date_end, title=title, location=location, fullAddress=fullAddress, locationCommonName=locationCommonName, lat=lat, lng=lng, description=description, invitations=invitationsSpaced, confirmed = '', declined = '', owner=current_user.id, owner_firstname=current_user.first_name)
         
-        # check if invites are registered, if so create a many-to=many relationship
+        # check if invites are registered, if so create a many-to-many relationship
         attendees = invitations.split(' ')
         current_user.meetups.append(new_meetup) # ensure the owner (current user) has the first many-to-many relationship
         for person in attendees:

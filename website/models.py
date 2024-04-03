@@ -14,7 +14,7 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(150), unique = True) # no user can have the same email as someone else
     password = db.Column(db.String(150))
     first_name = db.Column(db.String(150))
-    meetups = db.relationship('Meetup', secondary=user_meetup, backref="user") # tells SQL that whenever we create a note, add the note id into this user's notes relationship (creates a list of all the notes by the user)
+    meetups = db.relationship('Meetup', secondary=user_meetup, backref="user") # tells SQL that whenever we create a meetup, add the meetup id into this user's notes relationship (creates a list of all the meetups by the user)
 
 # database model: blueprint for how each object will look like
 class Meetup(db.Model):

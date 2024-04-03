@@ -24,6 +24,6 @@ packaging==23.2
 requests==2.31.0
 SQLAlchemy==1.4.41
 urllib3==2.1.0
-Werkzeug==2.2.3
+Werkzeug==2.3.0
 yarl==1.9.4
 zipp==3.17.0
