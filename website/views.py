@@ -49,15 +49,11 @@ def ideas():
         explanation = recommendation["activity_descriptions"].copy()
     return render_template("ideas.html", user=current_user, titles=titles, explanation=explanation)
 
-
-            
-
 @views.route('/create', methods=['GET', 'POST']) 
 @login_required
 def create():
     if request.method == 'POST': # if the user submits the form
         no_error = True
-        
         meetup_date = request.form.get('date')
         date = datetime.strptime(meetup_date, '%Y-%m-%dT%H:%M')  
         meetup_end = request.form.get('endDate')
@@ -68,16 +64,14 @@ def create():
         locationCommonName = request.form.get("locationCommonName")
         lat = request.form.get("latitude")
         lng = request.form.get("longitude")
-        if lat == "" or lng == "":
+        if lat == '-1000' or lng == '-1000':
             flash('\"' + location + '\" is not a valid address. Please try again using autocomplete.', category='error')
             no_error = False
         description = request.form.get('description')
         invitations = request.form.get('invitations') 
-        print("location: " + location)
         
         invitations = invitations.strip() # remove the spaces before and after the invitiations
         invitations = invitations.lower() # ensure the email inivitations are all lowercase
-        print("invitations:" + str (invitations))  
         if invitations.find(current_user.email) == -1: # if the current user's email isn't included in the invite list, add them
             invitations = current_user.email + " " + invitations
         invitationsSpaced = " " + invitations + " " # pad the invite list with a space at the beginning and end
@@ -87,7 +81,6 @@ def create():
         attendees = invitations.split(' ')
         current_user.meetups.append(new_meetup) # ensure the owner (current user) has the first many-to-many relationship
         for person in attendees:
-            print("person = " + person)
             if person != current_user.email:
                 user = User.query.filter_by(email=person).first()
                 if user: # if there is a registered user with that email
@@ -199,7 +192,6 @@ def decline_meetup():
             meetup.declined = meetup.declined + ", " + current_user.first_name
         db.session.commit()
         flash("\"" + meetup.title + "\" meetup declined.", category = 'error')
-    
     return jsonify({})
 
 @views.route('/delete-meetup', methods=['POST'])
